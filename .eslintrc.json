@@ -1,0 +1,31 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "parser": "@babel/eslint-parser",
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "google",
+        "plugin:react/jsx-runtime",
+        "plugin:testing-library/react",
+        "plugin:jest/all"
+    ],
+    "overrides": [
+    ],
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "require-jsdoc" : 0,
+        "linebreak-style": ["error", "windows"]
+    }
+}

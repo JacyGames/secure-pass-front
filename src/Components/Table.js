@@ -1,13 +1,14 @@
 import Pagination from './Pagination';
-import { useState } from 'react';
-import { Table } from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import {useState} from 'react';
 
 
 function ResponseTable(props) {
   const [page, setPage] = useState(1);
 
   function createItemsCount(page, count) {
-    return (page * 10 - 10 + count)
+    return (page * 10 - 10 + count);
   }
 
   return (
@@ -26,19 +27,33 @@ function ResponseTable(props) {
         <tbody>
           {props.response.map((article, id) => {
             return (<tr key={article.id}>
-              <td className="text-center p-2">{createItemsCount(page, id + 1)}</td>
+              <td className="text-center p-2">
+                {createItemsCount(page, id + 1)}
+              </td>
               <td className="text-center p-2">{article.description}</td>
               <td className="text-center p-2">{article.name}</td>
               <td className="text-center p-2">{article.login}</td>
               <td className="text-center p-2">{article.password}</td>
               <td className="text-center p-2">{article.url}</td>
-            </tr>)
+            </tr>);
           })}
         </tbody>
       </Table>
-      <Pagination setPage={setPage} setResponse={props.setResponse} baseURL={props.baseURL} allItemsCount={props.allItemsCount} />
+      <Pagination setPage={setPage}
+        setResponse={props.setResponse}
+        baseURL={props.baseURL}
+        allItemsCount={props.allItemsCount} />
     </div >
-  )
+  );
 }
+
+ResponseTable.propTypes = {
+  baseURL: PropTypes.string,
+  allItemsCount: PropTypes.number,
+  setResponse: PropTypes.func,
+  response: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  })),
+};
 
 export default ResponseTable;
