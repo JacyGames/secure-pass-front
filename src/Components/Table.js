@@ -5,7 +5,6 @@ import { Table } from 'react-bootstrap';
 
 function ResponseTable(props) {
   const [page, setPage] = useState(1);
-  let count = 1;
 
   function createItemsCount(page, count) {
     return (page * 10 - 10 + count)
@@ -26,8 +25,8 @@ function ResponseTable(props) {
         </thead>
         <tbody>
           {props.response.map((article, id) => {
-            return (<tr key={id}>
-              <td className="text-center p-2">{createItemsCount(page, count++)}</td>
+            return (<tr key={article.id}>
+              <td className="text-center p-2">{createItemsCount(page, id + 1)}</td>
               <td className="text-center p-2">{article.description}</td>
               <td className="text-center p-2">{article.name}</td>
               <td className="text-center p-2">{article.login}</td>
