@@ -1,23 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import NavBar from './Components/NavBar';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
+  const baseURL = 'http://localhost:8080/api';
+  const [response, setResponse] = useState([]);
+  const [allItemsCount, setAllItemsCount] = useState(0);
+
+  useEffect(
+    () => {
+      axios.get(`${baseURL}/Passwords?page=1`).then((response) => {
+        setAllItemsCount(response.data.pagination.allItemsCount);
+        setResponse(response.data.passwordInfos);
+      }).then(console.log(allItemsCount));
+    }, []
+  )
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NavBar allItemsCount={allItemsCount} baseURL={baseURL} setResponse={setResponse} response={response} />
     </div>
   );
 }
