@@ -15,7 +15,7 @@ function App() {
       axios.get(`${baseURL}/Passwords?page=1`).then((response) => {
         setAllItemsCount(response.data.pagination.allItemsCount);
         setResponse(response.data.passwordInfos);
-      }).then(console.log(allItemsCount));
+      });
     }, []
   )
   return (

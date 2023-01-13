@@ -4,8 +4,13 @@ import { Table } from 'react-bootstrap';
 
 
 function ResponseTable(props) {
-  let count = 1;
+  const [count, setCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(props.allItemsCount / rowsPerPage); i++) {
+    pageNumbers.push(i);
+  };
+  let itemsCount = pageNumbers.map(number => { return (number * rowsPerPage - 10 + 1) })
 
   return (
     <div className='p-3'>
@@ -23,7 +28,7 @@ function ResponseTable(props) {
         <tbody>
           {props.response.map((article, id) => {
             return (<tr key={id}>
-              <td className="text-center p-2">{count++}</td>
+              <td className="text-center p-2">{itemsCount[count]++}</td>
               <td className="text-center p-2">{article.description}</td>
               <td className="text-center p-2">{article.name}</td>
               <td className="text-center p-2">{article.login}</td>
@@ -33,7 +38,7 @@ function ResponseTable(props) {
           })}
         </tbody>
       </Table>
-      <Pagination setResponse={props.setResponse} baseURL={props.baseURL} rowsPerPage={rowsPerPage} allItemsCount={props.allItemsCount} />
+      <Pagination setCount={setCount} pageNumbers={pageNumbers} setResponse={props.setResponse} baseURL={props.baseURL} rowsPerPage={rowsPerPage} allItemsCount={props.allItemsCount} />
     </div >
   )
 }

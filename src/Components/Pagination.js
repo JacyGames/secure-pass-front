@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const Pagination = ({ rowsPerPage, allItemsCount, setResponse, baseURL }) => {
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(allItemsCount / rowsPerPage); i++) {
-    pageNumbers.push(i);
-  }
+const Pagination = ({ setResponse, baseURL, pageNumbers, setCount }) => {
+  /*  const pageNumbers = [];
+   for (let i = 1; i <= Math.ceil(allItemsCount / rowsPerPage); i++) {
+     pageNumbers.push(i);
+   } */
+
   return (
     <div>
       <ul className="pagination">
@@ -14,6 +15,7 @@ const Pagination = ({ rowsPerPage, allItemsCount, setResponse, baseURL }) => {
               <a href="#" className="page-link" onClick={() => {
                 axios.get(`${baseURL}/Passwords?page=${number}`).then((response) => {
                   setResponse(response.data.passwordInfos);
+                  setCount(number - 1)
                 });
               }}>
                 {number}
