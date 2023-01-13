@@ -1,7 +1,7 @@
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-const Pagination = ({ setResponse, baseURL, allItemsCount, setCount, setPage }) => {
+const Pagination = ({setResponse, baseURL, allItemsCount, setPage}) => {
   const rowsPerPage = 10;
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(allItemsCount / rowsPerPage); i++) {
@@ -12,13 +12,14 @@ const Pagination = ({ setResponse, baseURL, allItemsCount, setCount, setPage }) 
     <div>
       <ul className="pagination">
         {
-          pageNumbers.map(number => (
+          pageNumbers.map((number) => (
             <li className="page-item" key={number}>
               <a href="#" className="page-link" onClick={() => {
-                axios.get(`${baseURL}/Passwords?page=${number}`).then((response) => {
-                  setResponse(response.data.passwordInfos);
-                  setPage(number)
-                });
+                axios.get(`${baseURL}/Passwords?page=${number}`)
+                    .then((response) => {
+                      setResponse(response.data.passwordInfos);
+                      setPage(number);
+                    });
               }}>
                 {number}
               </a>
@@ -36,6 +37,7 @@ Pagination.propTypes = {
   rowsPerPage: PropTypes.number,
   allItemsCount: PropTypes.number,
   setResponse: PropTypes.func,
+  setPage: PropTypes.func,
 };
 
 export default Pagination;
