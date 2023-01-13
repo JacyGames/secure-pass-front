@@ -5,11 +5,12 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Link
-} from "react-router-dom";
-import ResponseTable from './Table'
-import Home from './Home'
+  Link,
+} from 'react-router-dom';
+import ResponseTable from './Table';
+import Home from './Home';
 import Forms from './Forms';
+import PropTypes from 'prop-types';
 
 
 function NavBar(props) {
@@ -30,12 +31,28 @@ function NavBar(props) {
         </Navbar>
         <Routes>
           <Route path="/home" element={<Home />} />
-          <Route path="/table" element={<ResponseTable allItemsCount={props.allItemsCount} baseURL={props.baseURL} setResponse={props.setResponse} response={props.response} />} />
-          <Route path="/form" element={<Forms baseURL={props.baseURL} setResponse={props.setResponse} response={props.response} />} />
+          <Route path="/table"
+            element={
+              <ResponseTable allItemsCount={props.allItemsCount}
+                baseURL={props.baseURL}
+                setResponse={props.setResponse}
+                response={props.response} />} />
+          <Route path="/form" element={
+            <Forms baseURL={props.baseURL}
+              setResponse={props.setResponse} response={props.response} />} />
         </Routes>
       </BrowserRouter>
     </div>
   );
 }
+
+NavBar.propTypes = {
+  allItemsCount: PropTypes.number,
+  baseURL: PropTypes.string,
+  setResponse: PropTypes.func,
+  response: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  })),
+};
 
 export default NavBar;

@@ -1,11 +1,11 @@
 import Pagination from './Pagination';
-import { useState } from 'react';
-import { Table } from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
+export const ROWS_PER_PAGE = 10;
 
 function ResponseTable(props) {
   let count = 1;
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   return (
     <div className='p-3'>
@@ -29,13 +29,24 @@ function ResponseTable(props) {
               <td className="text-center p-2">{article.login}</td>
               <td className="text-center p-2">{article.password}</td>
               <td className="text-center p-2">{article.url}</td>
-            </tr>)
+            </tr>);
           })}
         </tbody>
       </Table>
-      <Pagination setResponse={props.setResponse} baseURL={props.baseURL} rowsPerPage={rowsPerPage} allItemsCount={props.allItemsCount} />
+      <Pagination setResponse={props.setResponse}
+        baseURL={props.baseURL} rowsPerPage={ROWS_PER_PAGE}
+        allItemsCount={props.allItemsCount} />
     </div >
-  )
+  );
 }
+
+ResponseTable.propTypes = {
+  baseURL: PropTypes.string,
+  allItemsCount: PropTypes.number,
+  setResponse: PropTypes.func,
+  response: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  })),
+};
 
 export default ResponseTable;
