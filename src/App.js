@@ -11,13 +11,13 @@ function App() {
   const [allItemsCount, setAllItemsCount] = useState(0);
 
   useEffect(
-      () => {
-        axios.get(`${baseURL}/Passwords?page=1`).then((response) => {
-          setAllItemsCount(response.data.pagination.allItemsCount);
-          setResponse(response.data.passwordInfos);
-        }).then(console.log(allItemsCount));
-      }, [],
-  );
+    () => {
+      axios.get(`${baseURL}/Passwords?page=1`).then((response) => {
+        setAllItemsCount(response.data.pagination.allItemsCount);
+        setResponse(response.data.passwordInfos);
+      });
+    }, []
+  )
   return (
     <div>
       <NavBar allItemsCount={allItemsCount} baseURL={baseURL}
