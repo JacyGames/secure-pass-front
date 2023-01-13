@@ -4,13 +4,12 @@ import { Table } from 'react-bootstrap';
 
 
 function ResponseTable(props) {
-  const [count, setCount] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(props.allItemsCount / rowsPerPage); i++) {
-    pageNumbers.push(i);
-  };
-  let itemsCount = pageNumbers.map(number => { return (number * rowsPerPage - 10 + 1) })
+  const [page, setPage] = useState(1);
+  let count = 1;
+
+  function createItemsCount(page, count) {
+    return (page * 10 - 10 + count)
+  }
 
   return (
     <div className='p-3'>
@@ -28,7 +27,7 @@ function ResponseTable(props) {
         <tbody>
           {props.response.map((article, id) => {
             return (<tr key={id}>
-              <td className="text-center p-2">{itemsCount[count]++}</td>
+              <td className="text-center p-2">{createItemsCount(page, count++)}</td>
               <td className="text-center p-2">{article.description}</td>
               <td className="text-center p-2">{article.name}</td>
               <td className="text-center p-2">{article.login}</td>
@@ -38,7 +37,7 @@ function ResponseTable(props) {
           })}
         </tbody>
       </Table>
-      <Pagination setCount={setCount} pageNumbers={pageNumbers} setResponse={props.setResponse} baseURL={props.baseURL} rowsPerPage={rowsPerPage} allItemsCount={props.allItemsCount} />
+      <Pagination setPage={setPage} setResponse={props.setResponse} baseURL={props.baseURL} allItemsCount={props.allItemsCount} />
     </div >
   )
 }
