@@ -20,8 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src --color",
-    "prettier": "prettier src --check"
+    "lint": "eslint src --color"
   },
   "eslintConfig": {
     "extends": [
@@ -29,15 +28,9 @@
       "react-app/jest"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.js": [
-      "eslint --fix",
-      "git add"
+  "lint-staged":{
+    "**/*.{js,jsx,ts,tsx}":[
+      "npx eslint --fix"
     ]
   },
   "browserslist": {
@@ -60,7 +53,6 @@
     "eslint-plugin-react": "^7.32.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.0",
-    "prettier": "^2.8.2",
     "prop-types": "^15.8.1"
   }
 }
