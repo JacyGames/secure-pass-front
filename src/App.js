@@ -20,7 +20,8 @@ function App() {
   );
   return (
     <div>
-      <NavBar allItemsCount={allItemsCount} baseURL={baseURL}
+      <NavBar allItemsCount={allItemsCount}
+        baseURL={baseURL}
         setResponse={setResponse} response={response} />
     </div>
   );
