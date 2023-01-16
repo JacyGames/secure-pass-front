@@ -39,7 +39,7 @@ function NavBar(props) {
                 response={props.response} />} />
           <Route path="/form" element={
             <Forms baseURL={props.baseURL}
-              setResponse={props.setResponse} response={props.response} />} />
+              setResponse={props.setResponse} />} />
         </Routes>
       </BrowserRouter>
     </div>
@@ -51,7 +51,7 @@ NavBar.propTypes = {
   baseURL: PropTypes.string,
   setResponse: PropTypes.func,
   response: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
   })),
 };
 

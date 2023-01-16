@@ -1,10 +1,9 @@
-import axios from 'axios';
 import PropTypes from 'prop-types';
+import {ROWS_PER_PAGE} from '../shared/consts';
 
-const Pagination = ({setResponse, baseURL, allItemsCount, setPage}) => {
-  const rowsPerPage = 10;
+const Pagination = ({allItemsCount, changePage}) => {
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(allItemsCount / rowsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(allItemsCount / ROWS_PER_PAGE); i++) {
     pageNumbers.push(i);
   };
 
@@ -14,13 +13,10 @@ const Pagination = ({setResponse, baseURL, allItemsCount, setPage}) => {
         {
           pageNumbers.map((number) => (
             <li className="page-item" key={number}>
-              <a href="#" className="page-link" onClick={() => {
-                axios.get(`${baseURL}/Passwords?page=${number}`)
-                    .then((response) => {
-                      setResponse(response.data.passwordInfos);
-                      setPage(number);
-                    });
-              }}>
+              <a href="#" className="page-link"
+                onClick={() => {
+                  changePage(number);
+                }}>
                 {number}
               </a>
             </li>
@@ -33,11 +29,8 @@ const Pagination = ({setResponse, baseURL, allItemsCount, setPage}) => {
 };
 
 Pagination.propTypes = {
-  baseURL: PropTypes.string,
-  rowsPerPage: PropTypes.number,
   allItemsCount: PropTypes.number,
-  setResponse: PropTypes.func,
-  setPage: PropTypes.func,
+  changePage: PropTypes.func,
 };
 
 export default Pagination;
