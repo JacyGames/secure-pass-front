@@ -2,42 +2,55 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Row, Col} from 'react-bootstrap';
 import {useState} from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
+import {BASE_URL} from '../shared/consts';
 
-function Forms(props) {
-  const [name, setName] = useState('');
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [country, setCountry] = useState('');
+function Forms() {
+  const [form, setForm] = useState({
+    name: '',
+    login: '',
+    password: '',
+    email: '',
+    country: '',
+  });
 
-  const addPost = () => {
-    axios.post(`${props.baseURL}/Passwords`, {
-      description: country,
-      name: name,
-      login: login,
-      password: password,
-      url: email,
-    })
-        .then(function() {
-          setName('');
-          setLogin('');
-          setPassword('');
-          setEmail('');
-          setCountry('');
-        })
-        .then(
-            () => {
-              axios.get(`${props.baseURL}/Passwords?page=1`)
-                  .then((response) => {
-                    props.setResponse(response.data.passwordInfos);
-                  });
-            })
-        .catch(function(error) {
-        // eslint-disable-next-line no-console
-          console.log(error);
-        });
+  const onChange = (e) => {
+    const {value, name} = e.target;
+
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+  const addPost = async () => {
+    const settings = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'name': `${form.name}`,
+        'login': `${form.login}`,
+        'password': `${form.password}`,
+        'url': `${form.email}`,
+        'description': `${form.country}`,
+      }),
+    };
+    try {
+      const response = await fetch(BASE_URL, settings);
+      const data = await response.json();
+      setForm({
+        name: '',
+        login: '',
+        password: '',
+        email: '',
+        country: '',
+      });
+
+      return data;
+    } catch (e) {
+      return e;
+    }
   };
 
   return (
@@ -46,41 +59,36 @@ function Forms(props) {
         <Col>
           <Form.Group className="mb-3 " controlId="formBasicPassword">
             <Form.Label>Country</Form.Label>
-            <Form.Control value={country} onChange={(e) => {
-              setCountry(e.target.value);
-            }} type="text" placeholder="Country" />
+            <Form.Control name="country" value={form.country}
+              onChange={onChange} type="text" placeholder="Country" />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group>
             <Form.Label>Name</Form.Label>
-            <Form.Control value={name} onChange={(e) => {
-              setName(e.target.value);
-            }} type="text" placeholder="Enter name" />
+            <Form.Control name="name" value={form.name}
+              onChange={onChange} type="text" placeholder="Enter name" />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control value={email} onChange={(e) => {
-              setEmail(e.target.value);
-            }} type="email" placeholder="Enter email" />
+            <Form.Control name="email" value={form.email}
+              onChange={onChange} type="email" placeholder="Enter email" />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Login</Form.Label>
-            <Form.Control value={login} onChange={(e) => {
-              setLogin(e.target.value);
-            }} type="text" placeholder="Enter login" />
+            <Form.Control name="login" value={form.login}
+              onChange={onChange} type="text" placeholder="Enter login" />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3 " controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control value={password} onChange={(e) => {
-              setPassword(e.target.value);
-            }} type="password" placeholder="Password" />
+            <Form.Control name="password" value={form.password}
+              onChange={onChange} type="password" placeholder="Password" />
           </Form.Group>
         </Col>
       </Row>
@@ -93,10 +101,5 @@ function Forms(props) {
     </Form>
   );
 }
-
-Forms.propTypes = {
-  baseURL: PropTypes.string,
-  setResponse: PropTypes.func,
-};
 
 export default Forms;

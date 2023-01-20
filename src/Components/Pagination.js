@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import {ROWS_PER_PAGE} from '../shared/consts';
 
-const Pagination = ({allItemsCount, changePage}) => {
+const Pagination = (props) => {
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(allItemsCount / ROWS_PER_PAGE); i++) {
+  for (let i = 1; i <= Math.ceil(props.allItemsCount / ROWS_PER_PAGE); i++) {
     pageNumbers.push(i);
   };
 
@@ -15,7 +15,8 @@ const Pagination = ({allItemsCount, changePage}) => {
             <li className="page-item" key={number}>
               <a href="#" className="page-link"
                 onClick={() => {
-                  changePage(number);
+                  props.getPasswords(number);
+                  props.setPage(number);
                 }}>
                 {number}
               </a>
@@ -30,6 +31,8 @@ const Pagination = ({allItemsCount, changePage}) => {
 
 Pagination.propTypes = {
   allItemsCount: PropTypes.number,
+  getPasswords: PropTypes.func,
+  setPage: PropTypes.func,
   changePage: PropTypes.func,
 };
 

@@ -11,7 +11,7 @@ import ResponseTable from './Table';
 import Home from './Home';
 import Forms from './Forms';
 import PropTypes from 'prop-types';
-
+import {RESPONSE_OBJECT} from '../models/responseModels';
 
 function NavBar(props) {
   return (
@@ -33,13 +33,12 @@ function NavBar(props) {
           <Route path="/home" element={<Home />} />
           <Route path="/table"
             element={
-              <ResponseTable allItemsCount={props.allItemsCount}
-                baseURL={props.baseURL}
-                setResponse={props.setResponse}
-                response={props.response} />} />
+              <ResponseTable response={props.response}
+                allItemsCount={props.allItemsCount}
+                getPasswords={props.getPasswords}
+              />} />
           <Route path="/form" element={
-            <Forms baseURL={props.baseURL}
-              setResponse={props.setResponse} />} />
+            <Forms />} />
         </Routes>
       </BrowserRouter>
     </div>
@@ -47,12 +46,10 @@ function NavBar(props) {
 }
 
 NavBar.propTypes = {
+  getPasswords: PropTypes.func,
   allItemsCount: PropTypes.number,
-  baseURL: PropTypes.string,
   setResponse: PropTypes.func,
-  response: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  })),
+  response: PropTypes.arrayOf(PropTypes.shape(RESPONSE_OBJECT)),
 };
 
 export default NavBar;

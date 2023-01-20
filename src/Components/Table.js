@@ -2,21 +2,12 @@ import Pagination from './Pagination';
 import {Table} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {useState} from 'react';
-import axios from 'axios';
+import {RESPONSE_OBJECT} from '../models/responseModels';
 
 function ResponseTable(props) {
   const [page, setPage] = useState(1);
-
   function createItemsCount(page, count) {
     return (page * 10 - 10 + count);
-  }
-
-  function changePage(number) {
-    axios.get(`${props.baseURL}/Passwords?page=${number}`)
-        .then((response) => {
-          props.setResponse(response.data.passwordInfos);
-          setPage(number);
-        });
   }
 
   return (
@@ -47,8 +38,9 @@ function ResponseTable(props) {
           })}
         </tbody>
       </Table>
-      <Pagination changePage={changePage}
-        baseURL={props.baseURL}
+      <Pagination
+        setPage={setPage}
+        getPasswords={props.getPasswords}
         allItemsCount={props.allItemsCount}
       />
     </div >
@@ -56,24 +48,10 @@ function ResponseTable(props) {
 }
 
 ResponseTable.propTypes = {
-  baseURL: PropTypes.string,
-  allItemsCount: PropTypes.number,
   setResponse: PropTypes.func,
-  response: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    name: PropTypes.string,
-    login: PropTypes.string,
-    password: PropTypes.string,
-    passUserName: PropTypes.string,
-    importanceLevel: PropTypes.number,
-    url: PropTypes.string,
-    folter: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.oneOf([null]),
-    ]),
-    createdDate: PropTypes.string,
-  })),
+  getPasswords: PropTypes.func,
+  allItemsCount: PropTypes.number,
+  response: PropTypes.arrayOf(PropTypes.shape(RESPONSE_OBJECT)),
 };
 
 export default ResponseTable;
