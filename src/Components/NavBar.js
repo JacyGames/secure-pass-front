@@ -36,6 +36,7 @@ function NavBar(props) {
               <ResponseTable response={props.response}
                 allItemsCount={props.allItemsCount}
                 getPasswords={props.getPasswords}
+                fetchData={props.fetchData}
               />} />
           <Route path="/form" element={
             <Forms />} />
@@ -46,6 +47,7 @@ function NavBar(props) {
 }
 
 NavBar.propTypes = {
+  fetchData: PropTypes.func,
   getPasswords: PropTypes.func,
   allItemsCount: PropTypes.number,
   setResponse: PropTypes.func,

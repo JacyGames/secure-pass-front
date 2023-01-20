@@ -14,8 +14,8 @@ const Pagination = (props) => {
           pageNumbers.map((number) => (
             <li className="page-item" key={number}>
               <a href="#" className="page-link"
-                onClick={() => {
-                  props.getPasswords(number);
+                onClick={async () => {
+                  await props.fetchData(number);
                   props.setPage(number);
                 }}>
                 {number}
@@ -30,8 +30,10 @@ const Pagination = (props) => {
 };
 
 Pagination.propTypes = {
+  fetchData: PropTypes.func,
   allItemsCount: PropTypes.number,
   getPasswords: PropTypes.func,
+  setResponse: PropTypes.func,
   setPage: PropTypes.func,
   changePage: PropTypes.func,
 };

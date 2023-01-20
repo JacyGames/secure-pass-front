@@ -42,12 +42,15 @@ function ResponseTable(props) {
         setPage={setPage}
         getPasswords={props.getPasswords}
         allItemsCount={props.allItemsCount}
+        setResponse={props.setResponse}
+        fetchData={props.fetchData}
       />
     </div >
   );
 }
 
 ResponseTable.propTypes = {
+  fetchData: PropTypes.func,
   setResponse: PropTypes.func,
   getPasswords: PropTypes.func,
   allItemsCount: PropTypes.number,
