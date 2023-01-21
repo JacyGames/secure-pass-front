@@ -1,11 +1,20 @@
+import axios from 'axios';
 import {BASE_URL} from './consts';
 
-export async function getPasswords(page) {
+export async function fetchPassInfos(page) {
   try {
-    const dataResponse = await fetch(`${BASE_URL}?page=${page}`);
-    const data = await dataResponse.json();
-    return data;
+    return axios.get(`${BASE_URL}?page=${page}`);
   } catch (error) {
-    alert('Error');
+    // eslint-disable-next-line no-console
+    console.log('Error');
   }
-}
+};
+
+export const postPassInfos = (form) => {
+  try {
+    return axios.post(BASE_URL, form);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log('Error');
+  }
+};

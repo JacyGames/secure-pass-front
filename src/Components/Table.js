@@ -1,12 +1,25 @@
 import Pagination from './Pagination';
 import {Table} from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import {useState} from 'react';
-import {RESPONSE_OBJECT} from '../models/responseModels';
+import {useState, useEffect} from 'react';
+import {fetchPassInfos} from '../shared/requests';
 
-function ResponseTable(props) {
+function ResponseTable() {
   const [page, setPage] = useState(1);
-  function createItemsCount(page, count) {
+  const [passInfos, setPassInfos] = useState([]);
+  const [allItemsCount, setAllItemsCount] = useState(0);
+
+  const getPassInfos = (number) => {
+    fetchPassInfos(number).then((responseData) => {
+      setPassInfos(responseData.data.passwordInfos);
+      setAllItemsCount(responseData.data.pagination.allItemsCount);
+    });
+  };
+
+  useEffect(() => {
+    getPassInfos(1);
+  }, []);
+
+  function getSequenceNumber(page, count) {
     return (page * 10 - 10 + count);
   }
 
@@ -24,10 +37,10 @@ function ResponseTable(props) {
           </tr>
         </thead>
         <tbody>
-          {props.response.map((article, id) => {
+          {passInfos.map((article, id) => {
             return (<tr key={article.id}>
               <td className="text-center p-2">
-                {createItemsCount(page, id + 1)}
+                {getSequenceNumber(page, id + 1)}
               </td>
               <td className="text-center p-2">{article.description}</td>
               <td className="text-center p-2">{article.name}</td>
@@ -40,21 +53,11 @@ function ResponseTable(props) {
       </Table>
       <Pagination
         setPage={setPage}
-        getPasswords={props.getPasswords}
-        allItemsCount={props.allItemsCount}
-        setResponse={props.setResponse}
-        fetchData={props.fetchData}
+        allItemsCount={allItemsCount}
+        getPassInfos={getPassInfos}
       />
     </div >
   );
 }
-
-ResponseTable.propTypes = {
-  fetchData: PropTypes.func,
-  setResponse: PropTypes.func,
-  getPasswords: PropTypes.func,
-  allItemsCount: PropTypes.number,
-  response: PropTypes.arrayOf(PropTypes.shape(RESPONSE_OBJECT)),
-};
 
 export default ResponseTable;

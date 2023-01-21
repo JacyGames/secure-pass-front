@@ -2,55 +2,36 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Row, Col} from 'react-bootstrap';
 import {useState} from 'react';
-import {BASE_URL} from '../shared/consts';
+import {postPassInfos} from '../shared/requests';
 
 function Forms() {
   const [form, setForm] = useState({
     name: '',
     login: '',
     password: '',
-    email: '',
-    country: '',
+    url: '',
+    description: '',
   });
 
-  const onChange = (e) => {
-    const {value, name} = e.target;
-
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
-
-  const addPost = async () => {
-    const settings = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        'name': `${form.name}`,
-        'login': `${form.login}`,
-        'password': `${form.password}`,
-        'url': `${form.email}`,
-        'description': `${form.country}`,
-      }),
-    };
-    try {
-      const response = await fetch(BASE_URL, settings);
-      const data = await response.json();
+  const addPost = (form) => {
+    postPassInfos(form).then(() => {
       setForm({
         name: '',
         login: '',
         password: '',
-        email: '',
-        country: '',
+        url: '',
+        description: '',
       });
+    });
+  };
 
-      return data;
-    } catch (e) {
-      return e;
-    }
+  const onChange = (e) => {
+    const {value, name} = e.target;
+
+    setForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   return (
@@ -93,8 +74,10 @@ function Forms() {
         </Col>
       </Row>
       <Row>
-        <Button onClick={addPost} className='m-auto'
-          style={{width: 250}} variant="primary">
+        <Button onClick={() => {
+          addPost(form);
+        }} className='m-auto'
+        style={{width: 250}} variant="primary">
           Submit
         </Button>
       </Row>
