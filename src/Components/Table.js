@@ -1,13 +1,25 @@
 import Pagination from './Pagination';
 import {Table} from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {fetchPassInfos} from '../shared/requests';
 
-
-function ResponseTable(props) {
+function ResponseTable() {
   const [page, setPage] = useState(1);
+  const [passInfos, setPassInfos] = useState([]);
+  const [allItemsCount, setAllItemsCount] = useState(0);
 
-  function createItemsCount(page, count) {
+  const getPassInfos = (number) => {
+    fetchPassInfos(number).then((responseData) => {
+      setPassInfos(responseData.data.passwordInfos);
+      setAllItemsCount(responseData.data.pagination.allItemsCount);
+    });
+  };
+
+  useEffect(() => {
+    getPassInfos(1);
+  }, []);
+
+  function getSequenceNumber(page, count) {
     return (page * 10 - 10 + count);
   }
 
@@ -25,10 +37,10 @@ function ResponseTable(props) {
           </tr>
         </thead>
         <tbody>
-          {props.response.map((article, id) => {
+          {passInfos.map((article, id) => {
             return (<tr key={article.id}>
               <td className="text-center p-2">
-                {createItemsCount(page, id + 1)}
+                {getSequenceNumber(page, id + 1)}
               </td>
               <td className="text-center p-2">{article.description}</td>
               <td className="text-center p-2">{article.name}</td>
@@ -39,21 +51,13 @@ function ResponseTable(props) {
           })}
         </tbody>
       </Table>
-      <Pagination setPage={setPage}
-        setResponse={props.setResponse}
-        baseURL={props.baseURL}
-        allItemsCount={props.allItemsCount} />
+      <Pagination
+        setPage={setPage}
+        allItemsCount={allItemsCount}
+        getPassInfos={getPassInfos}
+      />
     </div >
   );
 }
-
-ResponseTable.propTypes = {
-  baseURL: PropTypes.string,
-  allItemsCount: PropTypes.number,
-  setResponse: PropTypes.func,
-  response: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  })),
-};
 
 export default ResponseTable;
