@@ -1,78 +1,37 @@
 import PropTypes from 'prop-types';
 import {ROWS_PER_PAGE} from '../shared/consts';
 import {useNavigate} from 'react-router-dom';
-import {useState} from 'react';
 import '../App.css';
 
 const Pagination = (props) => {
   const numberOfPages = [];
   const navigate = useNavigate();
-  const [inputNumber, setInputNumber] = useState(1);
+  const lastPage = Math.ceil(props.allItemsCount / ROWS_PER_PAGE);
+  const firstPage = 1;
+  const currentPage = Number(props.page);
 
-  for (let i = 1; i <= Math.ceil(props.allItemsCount / ROWS_PER_PAGE); i++) {
+  for (let i = Math.max(1, currentPage - 2);
+    i <= Math.min(lastPage, currentPage + 2); i++) {
     numberOfPages.push(i);
-  };
-
-  const currentButtonNumber = Number(props.page);
-  const pageNumberLimit = 5;
-  const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5);
-  const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
+  }
 
   const handleClick = (event) => {
     navigate(`../table/${event.target.id}`, {replace: true});
-    changePageLimit(currentButtonNumber);
-  };
-
-  const changePageLimit = (currentButtonNumber) => {
-    if (currentButtonNumber + 1 > maxPageNumberLimit) {
-      setMaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
-      setMinPageNumberLimit(minPageNumberLimit + pageNumberLimit);
-    };
-    if ((currentButtonNumber - 1) % pageNumberLimit == 0) {
-      setMaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
-      setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
-    };
-  };
-
-  const onInputChange = (e) => {
-    setInputNumber(e.target.value);
-  };
-
-  const onSubmit = (e) => {
-    navigate(`../table/${inputNumber}`, {replace: true});
-    changePageLimit(currentButtonNumber);
   };
 
   const handleNextBtn = () => {
-    navigate(`../table/${currentButtonNumber + 1}`, {replace: true});
-    changePageLimit(currentButtonNumber);
+    navigate(`../table/${currentPage + 1}`, {replace: true});
   };
 
   const handlePrevBtn = () => {
-    navigate(`../table/${currentButtonNumber - 1}`, {replace: true});
-    changePageLimit(currentButtonNumber);
+    navigate(`../table/${currentPage - 1}`, {replace: true});
   };
 
-  let pageIncrementBtn = null;
-  if (numberOfPages.length > maxPageNumberLimit) {
-    pageIncrementBtn = <li className="page-item">
-      <a href="" className="page-link"
-        onClick={handleNextBtn}>&hellip;</a>
-    </li>;
-  }
-
-  let pageDecrementBtn = null;
-  if (minPageNumberLimit >= 1) {
-    pageDecrementBtn = <li className="page-item">
-      <a href="" className="page-link"
-        onClick={handleNextBtn}>&hellip;</a>
-    </li>;
-  }
-
   const renderPageNumbers = numberOfPages.map((number) => {
-    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
+    if (number !== firstPage && number !== lastPage) {
       return (
-        <li className="page-item" key={number}>
+        <li className={`page-item ${number === currentPage ? 'active' : ''}`}
+          key={number}>
           <a href="" className="page-link" id={number}
             onClick={handleClick}>
             {number}
@@ -93,23 +52,27 @@ const Pagination = (props) => {
             Prev
           </a>
         </li>
-        {pageDecrementBtn}
+        <li className={`page-item ${firstPage === currentPage ? 'active' : ''}`}
+          key={firstPage}>
+          <a href="" className="page-link" id={firstPage}
+            onClick={handleClick}>
+            {firstPage}
+          </a>
+        </li>
         {renderPageNumbers}
-        {pageIncrementBtn}
+        <li className={`page-item ${lastPage === currentPage ? 'active' : ''}`}
+          key={lastPage}>
+          <a href="" className="page-link" id={lastPage}
+            onClick={handleClick}>
+            {lastPage}
+          </a>
+        </li>
         <li className="page-item">
           <a href="" className="page-link"
             onClick={handleNextBtn}>
             Next
           </a>
         </li>
-        <form onSubmit={onSubmit} className="form-pagination">
-          <p className="text-pagination">Go to:</p>
-          <input value={inputNumber}
-            onChange={onInputChange} type="number"
-            className="input-pagination page-link"
-          />
-          <input className="page-link" type="submit" value="Submit" />
-        </form>
       </ul>
     </div>
   );
