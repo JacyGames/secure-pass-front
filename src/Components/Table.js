@@ -3,14 +3,17 @@ import {useState, useEffect} from 'react';
 import {fetchPassInfos} from '../shared/requests';
 import {useParams} from 'react-router-dom';
 import Pagination from './Pagination';
-
+import Spinner from 'react-bootstrap/Spinner';
 function ResponseTable() {
   const [passInfos, setPassInfos] = useState([]);
   const [allItemsCount, setAllItemsCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const {page} = useParams();
+
   const getPassInfos = (number) => {
     fetchPassInfos(number).then((responseData) => {
       setPassInfos(responseData.data.passwordInfos);
+      setLoading(false);
       setAllItemsCount(responseData.data.pagination.allItemsCount);
     });
   };
@@ -18,13 +21,22 @@ function ResponseTable() {
   useEffect(() => {
     getPassInfos(page);
   }, []);
+
   function getSequenceNumber(count) {
     return (page * 10 - 10 + count);
   }
 
+  if (loading ) {
+    return (
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    );
+  }
+
   return (
     <div className='p-3'>
-      <Table striped bordered hover variant="dark">
+      {<Table striped bordered hover variant="dark">
         <thead>
           <tr>
             <th></th>
@@ -49,7 +61,7 @@ function ResponseTable() {
             </tr>);
           })}
         </tbody>
-      </Table>
+      </Table>}
       <Pagination allItemsCount={allItemsCount} page={page}/>
     </div >
   );

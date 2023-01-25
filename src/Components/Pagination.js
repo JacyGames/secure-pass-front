@@ -15,6 +15,28 @@ const Pagination = (props) => {
     numberOfPages.push(i);
   }
 
+  let pageIncrementBtn = null;
+  if (currentPage < lastPage - 3) {
+    pageIncrementBtn = <li className="page-item">
+      <a className="page-link"
+        onClick={(e) => {
+          e.preventDefault();
+        }}>
+      &hellip;</a>
+    </li>;
+  }
+
+  let pageDecrementBtn = null;
+  if (currentPage > 4) {
+    pageDecrementBtn = <li className="page-item">
+      <a className="page-link"
+        onClick={(e) => {
+          e.preventDefault();
+        }}>
+      &hellip;</a>
+    </li>;
+  }
+
   const handleClick = (event) => {
     navigate(`../table/${event.target.id}`, {replace: true});
   };
@@ -59,7 +81,9 @@ const Pagination = (props) => {
             {firstPage}
           </a>
         </li>
+        {pageDecrementBtn}
         {renderPageNumbers}
+        {pageIncrementBtn}
         <li className={`page-item ${lastPage === currentPage ? 'active' : ''}`}
           key={lastPage}>
           <a href="" className="page-link" id={lastPage}
@@ -80,7 +104,6 @@ const Pagination = (props) => {
 
 Pagination.propTypes = {
   page: PropTypes.string,
-  getPassInfos: PropTypes.func,
   allItemsCount: PropTypes.number,
 };
 
