@@ -18,7 +18,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/home" element={<Home />} />
-          <Route path="/table"
+          <Route path="/table/:page"
             element={
               <ResponseTable />} />
           <Route path="/form" element={

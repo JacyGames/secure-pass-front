@@ -1,38 +1,105 @@
 import PropTypes from 'prop-types';
 import {ROWS_PER_PAGE} from '../shared/consts';
+import {useNavigate} from 'react-router-dom';
+import '../App.css';
 
 const Pagination = (props) => {
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(props.allItemsCount / ROWS_PER_PAGE); i++) {
-    pageNumbers.push(i);
+  const numberOfPages = [];
+  const navigate = useNavigate();
+  const lastPage = Math.ceil(props.allItemsCount / ROWS_PER_PAGE);
+  const firstPage = 1;
+  const currentPage = Number(props.page);
+  const btnMarkup = <li className="page-item">
+    <a className="page-link"
+      onClick={(e) => {
+        e.preventDefault();
+      }}>
+  &hellip;</a>
+  </li>;
+
+  for (let i = Math.max(1, currentPage - 2);
+    i <= Math.min(lastPage, currentPage + 2); i++) {
+    numberOfPages.push(i);
+  }
+
+  let pageIncrementBtn = null;
+  if (currentPage < lastPage - 3) {
+    pageIncrementBtn = btnMarkup;
+  }
+
+  let pageDecrementBtn = null;
+  if (currentPage > 4) {
+    pageDecrementBtn = btnMarkup;
+  }
+
+  const handleClick = (event) => {
+    navigate(`../table/${event.target.id}`, {replace: true});
   };
+
+  const handleNextBtn = () => {
+    navigate(`../table/${currentPage + 1}`, {replace: true});
+  };
+
+  const handlePrevBtn = () => {
+    navigate(`../table/${currentPage - 1}`, {replace: true});
+  };
+
+  const renderPageNumbers = numberOfPages.map((number) => {
+    if (number !== firstPage && number !== lastPage) {
+      return (
+        <li className={`page-item ${number === currentPage ? 'active' : ''}`}
+          key={number}>
+          <a href="" className="page-link" id={number}
+            onClick={handleClick}>
+            {number}
+          </a>
+        </li>
+      );
+    } else {
+      return null;
+    }
+  });
 
   return (
     <div>
       <ul className="pagination">
-        {
-          pageNumbers.map((number) => (
-            <li className="page-item" key={number}>
-              <a href="#" className="page-link"
-                onClick={async () => {
-                  await props.getPassInfos(number);
-                  props.setPage(number);
-                }}>
-                {number}
-              </a>
-            </li>
-          ))
-
-        }
+        <li className="page-item">
+          <a href="" className="page-link"
+            onClick={handlePrevBtn}>
+            Prev
+          </a>
+        </li>
+        <li className={`page-item ${firstPage === currentPage ? 'active' : ''}`}
+          key={firstPage}>
+          <a href="" className="page-link" id={firstPage}
+            onClick={handleClick}>
+            {firstPage}
+          </a>
+        </li>
+        {pageDecrementBtn}
+        {renderPageNumbers}
+        {pageIncrementBtn}
+        <li className={`page-item ${lastPage === currentPage ? 'active' : ''}`}
+          key={lastPage}>
+          <a href="" className="page-link" id={lastPage}
+            onClick={handleClick}>
+            {lastPage}
+          </a>
+        </li>
+        <li className="page-item">
+          <a href="" className="page-link"
+            onClick={handleNextBtn}>
+            Next
+          </a>
+        </li>
       </ul>
     </div>
   );
 };
 
 Pagination.propTypes = {
-  getPassInfos: PropTypes.func,
+  page: PropTypes.string,
   allItemsCount: PropTypes.number,
-  setPage: PropTypes.func,
 };
 
 export default Pagination;

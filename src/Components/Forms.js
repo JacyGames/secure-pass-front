@@ -40,7 +40,7 @@ function Forms() {
         <Col>
           <Form.Group className="mb-3 " controlId="formBasicPassword">
             <Form.Label>Country</Form.Label>
-            <Form.Control name="country" value={form.country}
+            <Form.Control name="description" value={form.description}
               onChange={onChange} type="text" placeholder="Country" />
           </Form.Group>
         </Col>
@@ -54,7 +54,7 @@ function Forms() {
         <Col>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control name="email" value={form.email}
+            <Form.Control name="url" value={form.url}
               onChange={onChange} type="email" placeholder="Enter email" />
           </Form.Group>
         </Col>

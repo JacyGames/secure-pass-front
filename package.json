@@ -28,8 +28,8 @@
       "react-app/jest"
     ]
   },
-  "lint-staged":{
-    "**/*.{js,jsx,ts,tsx}":[
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
       "npx eslint --fix"
     ]
   },
