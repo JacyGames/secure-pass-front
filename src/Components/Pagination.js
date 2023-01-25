@@ -9,6 +9,13 @@ const Pagination = (props) => {
   const lastPage = Math.ceil(props.allItemsCount / ROWS_PER_PAGE);
   const firstPage = 1;
   const currentPage = Number(props.page);
+  const btnMarkup = <li className="page-item">
+    <a className="page-link"
+      onClick={(e) => {
+        e.preventDefault();
+      }}>
+  &hellip;</a>
+  </li>;
 
   for (let i = Math.max(1, currentPage - 2);
     i <= Math.min(lastPage, currentPage + 2); i++) {
@@ -17,24 +24,12 @@ const Pagination = (props) => {
 
   let pageIncrementBtn = null;
   if (currentPage < lastPage - 3) {
-    pageIncrementBtn = <li className="page-item">
-      <a className="page-link"
-        onClick={(e) => {
-          e.preventDefault();
-        }}>
-      &hellip;</a>
-    </li>;
+    pageIncrementBtn = btnMarkup;
   }
 
   let pageDecrementBtn = null;
   if (currentPage > 4) {
-    pageDecrementBtn = <li className="page-item">
-      <a className="page-link"
-        onClick={(e) => {
-          e.preventDefault();
-        }}>
-      &hellip;</a>
-    </li>;
+    pageDecrementBtn = btnMarkup;
   }
 
   const handleClick = (event) => {
