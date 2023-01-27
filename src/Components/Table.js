@@ -25,7 +25,7 @@ function ResponseTable() {
   };
 
   const deletePost = (id) => {
-    deletePassInfos(id).then(getPassInfos(page));
+    deletePassInfos(id).then(() => getPassInfos(page));
   };
 
   useEffect(() => {
