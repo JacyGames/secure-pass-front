@@ -24,7 +24,7 @@ function ResponseTable() {
     });
   };
 
-  const deletePost = (id) => {
+  const deletePass = (id) => {
     deletePassInfos(id).then(() => getPassInfos(page));
   };
 
@@ -74,7 +74,7 @@ function ResponseTable() {
                   style={{'height': '31px', 'fontWeight': '14px'}}
                   to={`/editUser/${article.id}`}>Edit</Link>
                 <Button variant="danger" size="sm"
-                  onClick={() => deletePost(article.id)}>
+                  onClick={() => deletePass(article.id)}>
                 Delete</Button>{' '}</td>
             </tr>);
           })}

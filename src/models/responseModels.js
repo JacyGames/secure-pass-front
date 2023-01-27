@@ -15,3 +15,11 @@ export const RESPONSE_OBJECT = {
   ]),
   createdDate: PropTypes.string,
 };
+
+export const FORM_OBJECT = {
+  name: PropTypes.string,
+  login: PropTypes.string,
+  password: PropTypes.string,
+  url: PropTypes.string,
+  description: PropTypes.string,
+};
