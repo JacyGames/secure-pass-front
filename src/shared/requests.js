@@ -18,3 +18,30 @@ export const postPassInfos = (form) => {
     console.log('Error');
   }
 };
+
+export const putPassInfos = async (user) => {
+  try {
+    return await axios.put(`${BASE_URL}/${id}`, user);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log('Error');
+  }
+};
+
+export const loadUser = async (id) => {
+  try {
+    return axios.get(`${BASE_URL}/${id}`);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('Error');
+  }
+};
+
+export const deletePassInfos = (id) => {
+  try {
+    return axios.delete(`${BASE_URL}/${id}`);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log('Error');
+  }
+};

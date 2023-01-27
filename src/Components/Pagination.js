@@ -49,7 +49,7 @@ const Pagination = (props) => {
       return (
         <li className={`page-item ${number === currentPage ? 'active' : ''}`}
           key={number}>
-          <a href="" className="page-link" id={number}
+          <a href="" className="page-link" cursor='pointer' id={number}
             onClick={handleClick}>
             {number}
           </a>

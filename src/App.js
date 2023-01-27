@@ -9,6 +9,7 @@ import {
 import ResponseTable from './Components/Table';
 import Home from './Components/Home';
 import Forms from './Components/Forms';
+import EditUser from './Components/EditUser';
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
               <ResponseTable />} />
           <Route path="/form" element={
             <Forms />} />
+          <Route path="/edituser/:id" element={
+            <EditUser />} />
         </Routes>
       </div>
     </BrowserRouter>
