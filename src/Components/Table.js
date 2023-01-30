@@ -4,6 +4,12 @@ import {fetchPassInfos} from '../shared/requests';
 import {useParams} from 'react-router-dom';
 import Pagination from './Pagination';
 import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/esm/Button';
+import {deletePassInfos} from '../shared/requests';
+import {
+  Link,
+} from 'react-router-dom';
+
 function ResponseTable() {
   const [passInfos, setPassInfos] = useState([]);
   const [allItemsCount, setAllItemsCount] = useState(0);
@@ -16,6 +22,10 @@ function ResponseTable() {
       setLoading(false);
       setAllItemsCount(responseData.data.pagination.allItemsCount);
     });
+  };
+
+  const deletePass = (id) => {
+    deletePassInfos(id).then(() => getPassInfos(page));
   };
 
   useEffect(() => {
@@ -45,6 +55,7 @@ function ResponseTable() {
             <th className='text-center'>Login</th>
             <th className='text-center'>Password</th>
             <th className='text-center'>Url</th>
+            <th className='text-center'></th>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +69,13 @@ function ResponseTable() {
               <td className="text-center p-2">{article.login}</td>
               <td className="text-center p-2">{article.password}</td>
               <td className="text-center p-2">{article.url}</td>
+              <td className="text-center">
+                <Link className="btn btn-primary me-4"
+                  style={{'height': '31px', 'fontWeight': '14px'}}
+                  to={`/editUser/${article.id}`}>Edit</Link>
+                <Button variant="danger" size="sm"
+                  onClick={() => deletePass(article.id)}>
+                Delete</Button>{' '}</td>
             </tr>);
           })}
         </tbody>

@@ -8,7 +8,8 @@ import {
 } from 'react-router-dom';
 import ResponseTable from './Components/Table';
 import Home from './Components/Home';
-import Forms from './Components/Forms';
+import PostInfo from './Components/PostInfo';
+import EditUser from './Components/EditUser';
 
 
 function App() {
@@ -22,7 +23,9 @@ function App() {
             element={
               <ResponseTable />} />
           <Route path="/form" element={
-            <Forms />} />
+            <PostInfo />} />
+          <Route path="/edituser/:id" element={
+            <EditUser />} />
         </Routes>
       </div>
     </BrowserRouter>
