@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {BASE_URL} from '../shared/consts';
 import Forms from './Forms';
-
+import authHeader from '../services/authHeader';
 function EditUser() {
   const {id} = useParams();
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ function EditUser() {
   });
 
   const editInfo = async () => {
-    await axios.put(`${BASE_URL}/${id}`, passwordInfo);
+    await axios.put(`${BASE_URL}/${id}`, passwordInfo, {headers: authHeader()});
     navigate(`../table/1`, {replace: true});
   };
 
