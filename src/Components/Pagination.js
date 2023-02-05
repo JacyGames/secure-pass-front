@@ -33,7 +33,10 @@ const Pagination = (props) => {
   }
 
   const handleClick = (event) => {
-    navigate(`../table/${event.target.id}`, {replace: true});
+    props.setLoading(true);
+    navigate(`../table/${event.target.id}`, {replace: true}).then(
+        props.setLoading(false),
+    );
   };
 
   const handleNextBtn = () => {
@@ -98,6 +101,7 @@ const Pagination = (props) => {
 };
 
 Pagination.propTypes = {
+  setLoading: PropTypes.func,
   page: PropTypes.string,
   allItemsCount: PropTypes.number,
 };

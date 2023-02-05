@@ -3,20 +3,20 @@ import {useState, useEffect} from 'react';
 import {fetchPassInfos} from '../shared/requests';
 import {useParams} from 'react-router-dom';
 import Pagination from './Pagination';
-import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/esm/Button';
 import {deletePassInfos} from '../shared/requests';
+import PropTypes from 'prop-types';
 import {
   Link,
 } from 'react-router-dom';
 
-function ResponseTable() {
+function ResponseTable({setLoading}) {
   const [passInfos, setPassInfos] = useState([]);
   const [allItemsCount, setAllItemsCount] = useState(0);
-  const [loading, setLoading] = useState(true);
   const {page} = useParams();
 
   const getPassInfos = (number) => {
+    setLoading(true);
     fetchPassInfos(number).then((responseData) => {
       setPassInfos(responseData.data.passwordInfos);
       setLoading(false);
@@ -34,14 +34,6 @@ function ResponseTable() {
 
   function getSequenceNumber(count) {
     return (page * 10 - 10 + count);
-  }
-
-  if (loading ) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
-    );
   }
 
   return (
@@ -80,9 +72,14 @@ function ResponseTable() {
           })}
         </tbody>
       </Table>}
-      <Pagination allItemsCount={allItemsCount} page={page}/>
+      <Pagination setLoading={setLoading}
+        allItemsCount={allItemsCount} page={page}/>
     </div >
   );
 }
+
+ResponseTable.propTypes = {
+  setLoading: PropTypes.func,
+};
 
 export default ResponseTable;

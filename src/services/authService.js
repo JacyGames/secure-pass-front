@@ -1,22 +1,9 @@
 import axios from 'axios';
-
+import {USER_TOKEN_KEY} from '../shared/consts';
 const API_URL = 'http://localhost:8080/api/Authenticate';
 
-const signup = (username, email, password, passwordHint) => {
-  return axios
-      .post(API_URL + '/register', {
-        username,
-        email,
-        password,
-        passwordHint,
-      })
-      .then((response) => {
-        if (response.data.token) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-        }
-
-        return response.data;
-      });
+const signup = (RegisterModel) => {
+  return axios.post(API_URL + '/register', RegisterModel);
 };
 
 const login = (email, password) => {
@@ -27,7 +14,7 @@ const login = (email, password) => {
       })
       .then((response) => {
         if (response.data.token) {
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.data));
         }
 
         return response.data;
@@ -35,11 +22,11 @@ const login = (email, password) => {
 };
 
 const logout = () => {
-  localStorage.removeItem('user');
+  localStorage.removeItem(USER_TOKEN_KEY);
 };
 
 const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem('user'));
+  return JSON.parse(localStorage.getItem(USER_TOKEN_KEY));
 };
 
 const AuthService = {

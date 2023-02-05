@@ -12,42 +12,34 @@ import PostInfo from './Components/PostInfo';
 import EditUser from './Components/EditUser';
 import Login from './Components/LogIn';
 import Signup from './Components/SignUp';
-import {useState, useEffect} from 'react';
-import AuthService from './services/authService';
-
+import Spinner from 'react-bootstrap/Spinner';
+import {useState} from 'react';
 function App() {
-  const [currentUser, setCurrentUser] = useState(undefined);
-
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-
-    if (user) {
-      setCurrentUser(user);
-    }
-  }, []);
-
-  const logOut = () => {
-    AuthService.logout();
-    window.location.reload();
-  };
+  const [loading, setLoading] = useState(false);
+  if (loading ) {
+    return (
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    );
+  }
 
   return (
     <BrowserRouter>
       <div>
         <NavBar />
         <Routes>
-          {currentUser &&<Route path="/home" element={<Home />} />}
+          <Route path="/home" element={<Home />} />
           <Route path="/table/:page"
-            element={<ResponseTable />}/>
+            element={<ResponseTable setLoading={setLoading}/>}/>
           <Route path="/form" element={
-            <PostInfo />} />
+            <PostInfo setLoading={setLoading}/>} />
           <Route path="/edituser/:id" element={
-            <EditUser />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signUp" element={<Signup />} />
+            <EditUser setLoading={setLoading}/>} />
+          <Route path="/login" element={<Login setLoading={setLoading}/>} />
+          <Route path="/signUp" element={<Signup setLoading={setLoading}/>} />
         </Routes>
       </div>
-      <button onClick={logOut}>Log Out</button>
     </BrowserRouter>
   );
 }
