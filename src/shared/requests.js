@@ -1,22 +1,18 @@
 import axios from 'axios';
 import {BASE_URL} from './consts';
 import authHeader from '../services/authHeader';
-/* import {useNavigate} from 'react-router-dom';
-*/
+import {useNavigate} from 'react-router-dom';
 
-export async function fetchPassInfos(page) {
-/*  const navigate = useNavigate();
-*/ try {
-    (error) => {
-      if (error.response && error.response.status === 401) {
-        AuthService.logout();
-        navigate(`../login`, {replace: true});
-      };
-      // eslint-disable-next-line no-console
-      console.log(error);
-    };
+export const fetchPassInfos = async (page) => {
+  const navigate = useNavigate();
+  try {
     return axios.get(`${BASE_URL}?page=${page}`, {headers: authHeader()});
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      AuthService.logout();
+      navigate('/login');
+      window.location.reload();
+    }
     // eslint-disable-next-line no-console
     console.log(error);
   }

@@ -8,12 +8,14 @@ const Login = ({setLoading}) => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
       await AuthService.login(email, password).then(
-          setLoading(false),
-          navigate(`../table/1`, {replace: true}),
+          () => {
+            navigate(`../table/1`, {replace: true});
+            setLoading(false);
+          },
           (error) => {
             // eslint-disable-next-line no-console
             console.log(error);
