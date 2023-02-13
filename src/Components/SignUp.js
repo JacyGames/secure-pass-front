@@ -1,27 +1,45 @@
 import AuthService from '../services/authService';
 import {useNavigate} from 'react-router-dom';
-import {useInput} from '../hooks/useInput';
+import {useForm} from 'react-hook-form';
+import {useState} from 'react';
+import {BiError} from 'react-icons/bi';
+
 const Signup = () => {
   const navigate = useNavigate();
-  const email = useInput('', {'isEmpty': true, 'minLength': 5,
-    'isEmail': true});
-  const password = useInput('', {'isEmpty': true, 'minLength': 6,
-    'isDigit': true, 'isUpperCase': true, 'isSymbol': true});
-  const username = useInput('', {'isEmpty': true, 'minLength': 3});
-  const passwordHint = useInput('', {'isEmpty': true, 'minLength': 3});
-  const RegisterModel = {'username': username.value,
-    'email': email.value, 'password': password.value,
-    'passwordHint': passwordHint.value};
+  const {
+    register,
+    formState: {
+      errors,
+      isValid,
+    },
+    handleSubmit,
+    reset,
+  } = useForm({
+    mode: 'onBlur',
+  });
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    username: '',
+    passwordHint: '',
+  });
+
+  const onChange = (e) => {
+    const {value, name} = e.target;
+
+    setForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const RegisterModel = form;
+
+  const onSubmit = () => {
     try {
-      await AuthService.signup(RegisterModel).then(
+      AuthService.signup(RegisterModel).then(
           navigate(`../login`, {replace: true}),
-          (error) => {
-            // eslint-disable-next-line no-console
-            console.log(error);
-          },
+          reset,
       );
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -48,68 +66,76 @@ const Signup = () => {
           <div className="form-group mt-3">
             <label>Username</label>
             <input
-              type="email"
+              {...register('username')}
+              type="text"
               className="form-control mt-1"
               placeholder="e.g Jane Doe"
-              value={username.value}
-              onChange={(e) => username.onChange(e)}
-              onBlur={(e) => username.onBlur(e)}
+              name="username"
+              value={form.username}
+              onChange={onChange}
             />
           </div>
           <div className="form-group mt-3">
             <label>Email address</label>
             <input
+              {...register('email', {required: 'The field cannot be empty',
+                pattern: {
+                // eslint-disable-next-line max-len
+                  value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+                  message: 'email is not valid',
+                }})}
               type="email"
               className="form-control mt-1"
               placeholder="Email Address"
-              value={email.value}
-              onChange={(e) => email.onChange(e)}
-              onBlur={(e) => email.onBlur(e)}
+              name="email"
+              value={form.email}
+              onChange={onChange}
             />
+            {errors.email && <div><BiError /> <span className='error'>
+              {errors.email.message}</span></div>}
           </div>
-          {(email.isDirty && email.isEmpty) && <div
-            style={{color: 'red', fontSize: 12}}>
-          The field cannot be empty</div>}
-          {(email.isDirty && !email.isEmpty && email.emailError) && <div
-            style={{color: 'red', fontSize: 12}}>
-            {email.value} is not valid</div>}
           <div className="form-group mt-3">
             <label>Password</label>
             <input
+              {...register('password',
+                  {required: 'The field cannot be empty', minLength: {
+                    value: 6,
+                    message: 'Password must be at least 6 character',
+                  },
+                  validate: (value) => {
+                    return (
+                      [/[A-Z]/, /[0-9]/, /[^a-zA-Z0-9]/].every((pattern) =>
+                        pattern.test(value),
+                      // eslint-disable-next-line max-len
+                      ) || 'Password must include upper, digit, and special chars'
+                    );
+                  },
+                  })}
               type="password"
               className="form-control mt-1"
               placeholder="Password"
-              value={password.value}
-              onChange={(e) => password.onChange(e)}
-              onBlur={(e) => password.onBlur(e)}
+              name="password"
+              value={form.password}
+              onChange={onChange}
             />
+            {errors.password && <div><BiError /> <span className='error'>
+              {errors.password.message}</span></div>}
           </div>
-          {(password.isDirty && password.minLength) &&
-          <div style={{color: 'red', fontSize: 12}}>
-          Passwords must be at least 6 characters</div>}
-          {(password.isDirty && password.digitError) &&
-          <div style={{color: 'red', fontSize: 12}}>
-          Passwords must have at least one digit</div>}
-          {(password.isDirty && password.upperCaseError) && <div
-            style={{color: 'red', fontSize: 12}}>
-            Passwords must have at least one uppercase</div>}
-          {(password.isDirty && password.symbolError) && <div
-            style={{color: 'red', fontSize: 12}}>
-            Passwords must have at least one non alphanumeric character</div>}
           <div className="form-group mt-3">
             <label>Password Hint</label>
             <input
+              {...register('passwordHint')}
               type="password"
               className="form-control mt-1"
               placeholder="password hint"
-              value={passwordHint.value}
-              onChange={(e) => passwordHint.onChange(e)}
-              onBlur={(e) => passwordHint.onBlur(e)}
+              name="passwordHint"
+              value={form.passwordHint}
+              onChange={onChange}
             />
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button disabled={!email.inputValid || !password.inputValid}
-              onClick={handleSignup} type="submit"
+            <button disabled={!isValid}
+              onClick={handleSubmit(onSubmit)} type="submit"
               className="btn btn-primary">
           Submit
             </button>

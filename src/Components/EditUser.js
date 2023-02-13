@@ -21,11 +21,9 @@ function EditUser({setLoading}) {
 
   const editInfo = async () => {
     setLoading(true);
-    await axios.put(`${BASE_URL}/${id}`, passwordInfo, {headers: authHeader()})
-        .then(
-            setLoading(false),
-            navigate(`../table/1`, {replace: true}),
-        );
+    await axios.put(`${BASE_URL}/${id}`, passwordInfo, {headers: authHeader()});
+    setLoading(true);
+    navigate(`../table/1`, {replace: true});
   };
 
   useEffect(() => {

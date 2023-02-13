@@ -1,30 +1,25 @@
 import {useNavigate} from 'react-router-dom';
 import AuthService from '../services/authService';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import PropTypes from 'prop-types';
+import {UserContext} from './UserContext';
 const Login = ({setLoading}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {setCurrentUser} = useContext(UserContext);
 
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = (e) => {
     setLoading(true);
-    try {
-      await AuthService.login(email, password).then(
-          () => {
-            navigate(`../table/1`, {replace: true});
-            setLoading(false);
-          },
-          (error) => {
-            // eslint-disable-next-line no-console
-            console.log(error);
-          },
-      );
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
+    e.preventDefault();
+    AuthService.login(email, password).then(
+        (response) => {
+          setCurrentUser(response);
+          setLoading(true);
+          navigate(`../table/1`, {replace: true});
+        },
+    );
   };
 
   const changeAuthMode = () => {
@@ -64,7 +59,7 @@ const Login = ({setLoading}) => {
             />
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button onClick={handleLogin}
+            <button onClick={ handleLogin}
               type="submit" className="btn btn-primary">
                 Submit
             </button>

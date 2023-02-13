@@ -4,25 +4,18 @@ import Navbar from 'react-bootstrap/Navbar';
 import {
   Link,
 } from 'react-router-dom';
-import {useState, useEffect} from 'react';
 import AuthService from '../services/authService';
 import {useNavigate} from 'react-router-dom';
-
+import {useContext} from 'react';
+import {UserContext} from './UserContext';
 function NavBar() {
-  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
-  const user = AuthService.getCurrentUser();
-
-  useEffect(() => {
-    if (user) {
-      setCurrentUser(user);
-    }
-  }, []);
+  const {currentUser, setCurrentUser} = useContext(UserContext);
 
   const logOut = () => {
     AuthService.logout();
     navigate(`../home`, {replace: true});
-    window.location.reload();
+    setCurrentUser(null);
   };
 
   return (
