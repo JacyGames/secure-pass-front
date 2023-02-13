@@ -9,6 +9,7 @@ const Pagination = (props) => {
   const lastPage = Math.ceil(props.allItemsCount / ROWS_PER_PAGE);
   const firstPage = 1;
   const currentPage = Number(props.page);
+
   const btnMarkup = <li className="page-item">
     <a className="page-link"
       onClick={(e) => {
@@ -33,7 +34,10 @@ const Pagination = (props) => {
   }
 
   const handleClick = (event) => {
-    navigate(`../table/${event.target.id}`, {replace: true});
+    props.setLoading(true);
+    navigate(`../table/${event.target.id}`, {replace: true}).then(
+        props.setLoading(false),
+    );
   };
 
   const handleNextBtn = () => {
@@ -60,44 +64,51 @@ const Pagination = (props) => {
     }
   });
 
-  return (
-    <div>
-      <ul className="pagination">
-        <li className="page-item">
-          <a href="" className="page-link"
-            onClick={handlePrevBtn}>
+  {
+    if (lastPage === 1 || lastPage === 0) {
+      return null;
+    } else {
+      return (
+        <div>
+          <ul className="pagination">
+            <li className="page-item">
+              <a href="" className="page-link"
+                onClick={handlePrevBtn}>
             Prev
-          </a>
-        </li>
-        <li className={`page-item ${firstPage === currentPage ? 'active' : ''}`}
-          key={firstPage}>
-          <a href="" className="page-link" id={firstPage}
-            onClick={handleClick}>
-            {firstPage}
-          </a>
-        </li>
-        {pageDecrementBtn}
-        {renderPageNumbers}
-        {pageIncrementBtn}
-        <li className={`page-item ${lastPage === currentPage ? 'active' : ''}`}
-          key={lastPage}>
-          <a href="" className="page-link" id={lastPage}
-            onClick={handleClick}>
-            {lastPage}
-          </a>
-        </li>
-        <li className="page-item">
-          <a href="" className="page-link"
-            onClick={handleNextBtn}>
+              </a>
+            </li>
+            <li className={`page-item
+            ${firstPage === currentPage ? 'active' : ''}`}
+            >
+              <a href="" className="page-link" id={firstPage}
+                onClick={handleClick}>
+                {firstPage}
+              </a>
+            </li>
+            {pageDecrementBtn}
+            {renderPageNumbers}
+            {pageIncrementBtn}
+            <li className={`page-item
+            ${lastPage === currentPage ? 'active' : ''}`}
+            >
+              <a href="" className="page-link" id={lastPage}
+                onClick={handleClick}>
+                {lastPage}
+              </a>
+            </li>
+            <li className="page-item">
+              <a href="" className="page-link"
+                onClick={handleNextBtn}>
             Next
-          </a>
-        </li>
-      </ul>
-    </div>
-  );
+              </a>
+            </li>
+          </ul>
+        </div>);
+    }}
 };
 
 Pagination.propTypes = {
+  setLoading: PropTypes.func,
   page: PropTypes.string,
   allItemsCount: PropTypes.number,
 };

@@ -28,5 +28,5 @@
         "require-jsdoc" : 0,
         "linebreak-style": ["error", "windows"],
         "no-console": ["error", { "allow": ["warn", "error", "info"] }]
-    }
+        }
 }
