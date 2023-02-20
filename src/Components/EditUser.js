@@ -17,6 +17,9 @@ function EditUser({setLoading}) {
     password: '',
     url: '',
     description: '',
+    passUserName: '',
+    importanceLevel: 0,
+    folder: '',
   });
 
   const editInfo = async () => {

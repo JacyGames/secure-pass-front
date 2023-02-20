@@ -2,8 +2,8 @@ import axios from 'axios';
 import {USER_TOKEN_KEY} from '../shared/consts';
 const API_URL = 'http://localhost:8080/api/Authenticate';
 
-const signup = (RegisterModel) => {
-  return axios.post(API_URL + '/register', RegisterModel);
+const signup = (registerModel) => {
+  return axios.post(API_URL + '/register', registerModel);
 };
 
 const login = (email, password) => {

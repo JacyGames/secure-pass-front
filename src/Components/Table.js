@@ -52,7 +52,11 @@ function ResponseTable({setLoading}) {
               <th className='text-center'>Name</th>
               <th className='text-center'>Login</th>
               <th className='text-center'>Password</th>
-              <th className='text-center'>Url</th>
+              <th className='text-center'>Site Url</th>
+              <th className='text-center'>Username</th>
+              <th className='text-center'>Importance Level</th>
+              <th className='text-center'>Folder</th>
+              <th className='text-center'>Created Date</th>
               <th className='text-center'></th>
             </tr>
           </thead>
@@ -67,8 +71,13 @@ function ResponseTable({setLoading}) {
                 <td className="text-center p-2">{article.login}</td>
                 <td className="text-center p-2">{article.password}</td>
                 <td className="text-center p-2">{article.url}</td>
+                <td className="text-center p-2">{article.passUserName}</td>
+                <td className="text-center p-2">{article.importanceLevel}</td>
+                <td className="text-center p-2">{article.folder}</td>
+                <td className="text-center p-2">
+                  {article.createdDate.slice(0, 19)}</td>
                 <td className="text-center">
-                  <Button className='me-5' style={{'width': '65px'}}
+                  <Button className='me-2' style={{'width': '65px'}}
                     variant="primary" size="sm"
                     onClick={() => editPass(article.id)}>
                 Edit</Button>{' '}

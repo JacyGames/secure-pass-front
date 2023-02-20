@@ -22,13 +22,13 @@ function NavBar() {
     <div>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand as={Link} to="/home">React-Bootstrap</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/home">Secure-Password</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             {currentUser && <Nav className="me-auto">
               <Nav.Link as={Link}
                 to="/table/1" >Home</Nav.Link>
-              <Nav.Link as={Link} to="/form">Forms</Nav.Link>
+              <Nav.Link as={Link} to="/form">Create password</Nav.Link>
             </Nav>}
             {currentUser ? (<Nav.Link
               onClick={logOut} >Log Out</Nav.Link>):

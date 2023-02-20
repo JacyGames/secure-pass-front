@@ -15,18 +15,20 @@ import Signup from './Components/SignUp';
 import Spinner from 'react-bootstrap/Spinner';
 import {useState, useEffect, useMemo} from 'react';
 import {UserContext} from './Components/UserContext';
-import {USER_TOKEN_KEY} from './shared/consts';
+import ProtectedRoute from './Components/ProtectedRoute';
+
 function App() {
   const [loading, setLoading] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(
+      localStorage.getItem('loggedIn') === 'true',
+  );
   const providerValue = useMemo(() => (
     {currentUser, setCurrentUser}
   ), [currentUser, setCurrentUser]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem(USER_TOKEN_KEY));
-    setCurrentUser(user);
-  }, []);
+    localStorage.setItem('loggedIn', currentUser);
+  }, [currentUser]);
 
   return (
     <div>
@@ -43,14 +45,18 @@ function App() {
               </Spinner> : null}
             </div>
             <Routes>
-              <Route path="/home" element={<Home />} />
-              <Route path="/table/:page"
-                element={<ResponseTable setLoading={setLoading}/>}/>
-              <Route path="/form" element={
-                <PostInfo setLoading={setLoading}/>} />
-              <Route path="/edituser/:id" element={
-                <EditUser setLoading={setLoading}/>} />
-              <Route path="/login" element={<Login setLoading={setLoading}/>} />
+              <Route path="/home"
+                element={ <Home />}/>
+              <Route element={<ProtectedRoute user={currentUser}/>}>
+                <Route path="/table/:page"
+                  element={<ResponseTable setLoading={setLoading}/>}/>
+                <Route path="/form" element={
+                  <PostInfo setLoading={setLoading}/>} />
+                <Route path="/edituser/:id" element={
+                  <EditUser setLoading={setLoading}/>} />
+              </Route>
+              <Route path="/login"
+                element={<Login setLoading={setLoading}/>} />
               <Route path="/signUp"
                 element={<Signup setLoading={setLoading}/>} />
             </Routes>
@@ -60,5 +66,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
