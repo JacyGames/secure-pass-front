@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {USER_TOKEN_KEY} from '../shared/consts';
 const API_URL = 'http://localhost:8080/api/Authenticate';
+import {Navigate} from 'react-router-dom';
 
 const signup = (registerModel) => {
   return axios.post(API_URL + '/register', registerModel);
@@ -23,6 +24,7 @@ const login = (email, password) => {
 
 const logout = () => {
   localStorage.removeItem(USER_TOKEN_KEY);
+  <Navigate to={'/home'} replace />;
 };
 
 const getCurrentUser = () => {

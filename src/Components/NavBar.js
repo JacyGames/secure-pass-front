@@ -5,16 +5,13 @@ import {
   Link,
 } from 'react-router-dom';
 import AuthService from '../services/authService';
-import {useNavigate} from 'react-router-dom';
 import {useContext} from 'react';
 import {UserContext} from './UserContext';
 function NavBar() {
-  const navigate = useNavigate();
   const {currentUser, setCurrentUser} = useContext(UserContext);
 
   const logOut = () => {
     AuthService.logout();
-    navigate(`../home`, {replace: true});
     setCurrentUser(null);
   };
 
