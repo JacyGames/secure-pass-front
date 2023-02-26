@@ -4,11 +4,9 @@ import {useForm} from 'react-hook-form';
 import {useState} from 'react';
 import {BiError} from 'react-icons/bi';
 import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai';
-import GeneratePassword from './PasswordGenerator';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [createdPassword, setCreatedPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -29,10 +27,6 @@ const Signup = () => {
     passwordHint: '',
   });
 
-  const onPasswordChange = (e) => {
-    setCreatedPassword(e.target.value);
-  };
-
   const onChange = (e) => {
     const {value, name} = e.target;
 
@@ -44,10 +38,8 @@ const Signup = () => {
   const RegisterModel = form;
 
   const onSubmit = () => {
-    const password = createdPassword || form.password;
-    const updatedModel = {...RegisterModel, password};
     try {
-      AuthService.signup(updatedModel).then(
+      AuthService.signup(RegisterModel).then(
           navigate(`../login`, {replace: true}),
           reset,
       );
@@ -106,7 +98,7 @@ const Signup = () => {
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
-            <div style={{display: 'flex', alignItems: 'center'}}>
+            <div className="input-group">
               <input
                 {...register('password',
                     {required: 'The field cannot be empty', minLength: {
@@ -126,10 +118,13 @@ const Signup = () => {
                 className="form-control mt-1"
                 placeholder="Password"
                 name="password"
-                value={createdPassword || form.password}
-                onChange={createdPassword ? onPasswordChange : onChange}
+                value={form.password}
+                onChange={onChange}
               />
-              <button type="button" className="btn btn-light"
+              <button type="button"
+                className="btn btn-light btn-outline-primary"
+                style={{marginTop: '4px', display: 'flex',
+                  justifyContent: 'center', alignItems: 'center'}}
                 onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <AiOutlineEye/> :
                <AiOutlineEyeInvisible/>}
@@ -138,8 +133,6 @@ const Signup = () => {
             {errors.password && <div><BiError /> <span className='error'>
               {errors.password.message}</span></div>}
           </div>
-          <GeneratePassword setCreatedPassword={setCreatedPassword}
-            createdPassword={createdPassword}/>
           <div className="form-group mt-3">
             <label>Password Hint</label>
             <input

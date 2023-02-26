@@ -22,7 +22,7 @@ function EditUser({setLoading}) {
     folder: '',
   });
 
-  const editInfo = async () => {
+  const editInfo = async (passwordInfo) => {
     setLoading(true);
     await axios.put(`${BASE_URL}/${id}`, passwordInfo, {headers: authHeader()});
     setLoading(true);

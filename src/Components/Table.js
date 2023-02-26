@@ -14,7 +14,6 @@ function ResponseTable({setLoading}) {
   const [passInfos, setPassInfos] = useState([]);
   const {page} = useParams();
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(false);
   const defaultColDef = useMemo(() => {
     return {
       sortable: true,
@@ -27,7 +26,6 @@ function ResponseTable({setLoading}) {
     fetchPassInfos(number).then((responseData) => {
       setPassInfos(responseData.data.passwordInfos);
       setAllItemsCount(responseData.data.pagination.allItemsCount);
-      setCurrentUser(true);
       setLoading(false);
     });
   };
@@ -107,18 +105,16 @@ function ResponseTable({setLoading}) {
 
   return (
     <div>
-      {currentUser ? (
-        <div className="ag-theme-alpine-dark p-3" style={{height: 600}}>
-          <AgGridReact
-            rowData={passInfos}
-            columnDefs={columnDefs}
-            defaultColDef={defaultColDef}
-            gridOptions={gridOptions}
-          />
-          <Pagination setLoading={setLoading}
-            allItemsCount={allItemsCount} page={page}/>
-        </div>
-      ) : null}
+      <div className="ag-theme-alpine-dark p-3" style={{height: 600}}>
+        <AgGridReact
+          rowData={passInfos}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          gridOptions={gridOptions}
+        />
+        <Pagination setLoading={setLoading}
+          allItemsCount={allItemsCount} page={page}/>
+      </div>
     </div>
   );
 }

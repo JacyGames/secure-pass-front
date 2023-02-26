@@ -12,7 +12,7 @@ function NavBar() {
 
   const logOut = () => {
     AuthService.logout();
-    setCurrentUser(null);
+    setCurrentUser(false);
   };
 
   return (

@@ -53,7 +53,7 @@ const Login = ({setLoading}) => {
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
-            <div style={{display: 'flex', alignItems: 'center'}}>
+            <div className="input-group">
               <input
                 type={showPassword ? 'text' : 'password'}
                 className="form-control mt-1"
@@ -61,8 +61,10 @@ const Login = ({setLoading}) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button type="button" className="btn btn-light"
-                onClick={() => setShowPassword(!showPassword)}>
+              <button type="button" className="btn btn-light
+              btn-outline-primary" style={{marginTop: '4px', display: 'flex',
+                justifyContent: 'center', alignItems: 'center'}}
+              onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <AiOutlineEye/> :
                <AiOutlineEyeInvisible/>}
               </button>

@@ -5,9 +5,13 @@ import {FORM_OBJECT} from '../models/responseModels';
 import PropTypes from 'prop-types';
 import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai';
 import {useState} from 'react';
-
+import GeneratePassword from './PasswordGenerator';
 function Forms(props) {
   const [showPassword, setShowPassword] = useState(false);
+  const [createdPassword, setCreatedPassword] = useState('');
+  const onPasswordChange = (e) => {
+    setCreatedPassword(e.target.value);
+  };
 
   const onChange = (e) => {
     const {value, name} = e.target;
@@ -61,8 +65,10 @@ offset-md-3 border rounded p-5 mt-5 shadow'>
           <Form.Group controlId="formBasicPassword" className='mb-4'>
             <Form.Label>Password</Form.Label>
             <div style={{display: 'flex', alignItems: 'center'}}>
-              <Form.Control name="password" value={props.passState.password}
-                onChange={onChange} type={showPassword ? 'text' : 'password'}
+              <Form.Control name="password"
+                value={createdPassword || props.passState.password}
+                onChange={createdPassword ? onPasswordChange : onChange}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Password" maxLength={15}
               />
               <Button variant="light"
@@ -71,10 +77,12 @@ offset-md-3 border rounded p-5 mt-5 shadow'>
                <AiOutlineEyeInvisible/>}
               </Button>
             </div>
+            <GeneratePassword setCreatedPassword={setCreatedPassword}
+              createdPassword={createdPassword}/>
           </Form.Group>
           <Form.Select
             value={props.passState.importanceLevel} className='mb-4'
-            onChange={onChange} name="importanceLevel" style={{width: 200}}>
+            onChange={onChange} name="importanceLevel">
             <option value="0">Importance Level</option>
             <option value="1">Minor</option>
             <option value="2">Regular</option>
@@ -83,7 +91,7 @@ offset-md-3 border rounded p-5 mt-5 shadow'>
           </Form.Select>
           <Form.Select
             value={props.passState.folder}
-            onChange={onChange} name="folder" style={{width: 200}}>
+            onChange={onChange} name="folder">
             <option>Folder</option>
             <option value="business">Business</option>
             <option value="shopping">Shopping</option>
@@ -95,8 +103,8 @@ offset-md-3 border rounded p-5 mt-5 shadow'>
           <Form.Group>
             <Form.Label>Description</Form.Label>
             <Form.Control name="description" value={props.passState.description}
-              onChange={onChange} type="text" placeholder="Country"
-              as="textarea" rows={4} maxLength={64}/>
+              onChange={onChange} type="text" placeholder="Enter Description"
+              as="textarea" rows={6} maxLength={64}/>
           </Form.Group>
         </Col>
       </Row>
@@ -106,7 +114,9 @@ offset-md-3 border rounded p-5 mt-5 shadow'>
       </Row>
       <Row>
         <Button onClick={() => {
-          props.onSubmit(props.passState);
+          const password = createdPassword || props.passState.password;
+          const updatedModel = {...props.passState, password};
+          props.onSubmit(updatedModel);
         }} className='m-auto'
         style={{width: 250}} variant="primary">
           Submit
