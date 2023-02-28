@@ -3,9 +3,11 @@ import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {useState} from 'react';
 import {BiError} from 'react-icons/bi';
+import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     formState: {
@@ -96,28 +98,38 @@ const Signup = () => {
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
-            <input
-              {...register('password',
-                  {required: 'The field cannot be empty', minLength: {
-                    value: 6,
-                    message: 'Password must be at least 6 character',
-                  },
-                  validate: (value) => {
-                    return (
-                      [/[A-Z]/, /[0-9]/, /[^a-zA-Z0-9]/].every((pattern) =>
-                        pattern.test(value),
-                      // eslint-disable-next-line max-len
-                      ) || 'Password must include upper, digit, and special chars'
-                    );
-                  },
-                  })}
-              type="password"
-              className="form-control mt-1"
-              placeholder="Password"
-              name="password"
-              value={form.password}
-              onChange={onChange}
-            />
+            <div className="input-group">
+              <input
+                {...register('password',
+                    {required: 'The field cannot be empty', minLength: {
+                      value: 6,
+                      message: 'Password must be at least 6 character',
+                    },
+                    validate: (value) => {
+                      return (
+                        [/[A-Z]/, /[0-9]/, /[^a-zA-Z0-9]/].every((pattern) =>
+                          pattern.test(value),
+                            // eslint-disable-next-line max-len
+                        ) || 'Password must include upper, digit, and special chars'
+                      );
+                    },
+                    })}
+                type={showPassword ? 'text' : 'password'}
+                className="form-control mt-1"
+                placeholder="Password"
+                name="password"
+                value={form.password}
+                onChange={onChange}
+              />
+              <button type="button"
+                className="btn btn-light btn-outline-primary"
+                style={{marginTop: '4px', display: 'flex',
+                  justifyContent: 'center', alignItems: 'center'}}
+                onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <AiOutlineEye/> :
+               <AiOutlineEyeInvisible/>}
+              </button>
+            </div>
             {errors.password && <div><BiError /> <span className='error'>
               {errors.password.message}</span></div>}
           </div>
@@ -125,7 +137,7 @@ const Signup = () => {
             <label>Password Hint</label>
             <input
               {...register('passwordHint')}
-              type="password"
+              type="text"
               className="form-control mt-1"
               placeholder="password hint"
               name="passwordHint"

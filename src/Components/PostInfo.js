@@ -11,6 +11,9 @@ function PostInfo({setLoading}) {
     password: '',
     url: '',
     description: '',
+    passUserName: '',
+    importanceLevel: 0,
+    folder: '',
   });
   const navigate = useNavigate();
 
@@ -23,6 +26,9 @@ function PostInfo({setLoading}) {
         password: '',
         url: '',
         description: '',
+        passUserName: '',
+        importanceLevel: 0,
+        folder: '',
       }),
       setLoading(false);
       navigate(`../table/1`, {replace: true});

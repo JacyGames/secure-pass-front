@@ -1,25 +1,31 @@
-import {Table} from 'react-bootstrap';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import {fetchPassInfos} from '../shared/requests';
 import {useParams, useNavigate} from 'react-router-dom';
-import Pagination from './Pagination';
 import Button from 'react-bootstrap/esm/Button';
 import {deletePassInfos} from '../shared/requests';
 import PropTypes from 'prop-types';
+import {AgGridReact} from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+import Pagination from './Pagination';
 
 function ResponseTable({setLoading}) {
-  const [passInfos, setPassInfos] = useState([]);
   const [allItemsCount, setAllItemsCount] = useState(0);
+  const [passInfos, setPassInfos] = useState([]);
   const {page} = useParams();
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(false);
+  const defaultColDef = useMemo(() => {
+    return {
+      sortable: true,
+      filter: true,
+    };
+  }, []);
 
   const getPassInfos = (number) => {
     setLoading(true);
     fetchPassInfos(number).then((responseData) => {
       setPassInfos(responseData.data.passwordInfos);
       setAllItemsCount(responseData.data.pagination.allItemsCount);
-      setCurrentUser(true);
       setLoading(false);
     });
   };
@@ -41,47 +47,74 @@ function ResponseTable({setLoading}) {
     return (page * 10 - 10 + count);
   }
 
+  const columnDefs = [
+    {
+      headerName: '',
+      field: '',
+      width: 60,
+      pinned: 'left',
+      valueGetter: (params) => getSequenceNumber(params.node.rowIndex + 1),
+    },
+    {headerName: 'Description', field: 'description'},
+    {headerName: 'Name', field: 'name'},
+    {headerName: 'Login', field: 'login'},
+    {headerName: 'Password', field: 'password'},
+    {headerName: 'Site Url', field: 'url'},
+    {headerName: 'Username', field: 'passUserName'},
+    {headerName: 'Importance Level', field: 'importanceLevel'},
+    {headerName: 'Folder', field: 'folder'},
+    {
+      headerName: 'Created Date',
+      field: 'createdDate',
+      valueFormatter: (params) =>
+        params.value ? params.value.slice(0, 19) : '',
+    },
+    {
+      headerName: '',
+      field: '',
+      width: 180,
+      pinned: 'right',
+      cellStyle: {justifyContent: 'center', alignItems: 'center'},
+      cellRendererFramework: (params) => (
+        <>
+          <Button
+            className="me-2"
+            style={{width: '65px'}}
+            variant="primary"
+            size="sm"
+            onClick={() => editPass(params.data.id)}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
+            style={{width: '65px'}}
+            onClick={() => deletePass(params.data.id)}
+          >
+            Delete
+          </Button>
+        </>
+      ),
+    },
+  ]
+  ;
+  const gridOptions = {
+    rowHeight: 50,
+  };
+
   return (
     <div>
-      {currentUser ? <div className='p-3'>
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th></th>
-              <th className='text-center'>Description</th>
-              <th className='text-center'>Name</th>
-              <th className='text-center'>Login</th>
-              <th className='text-center'>Password</th>
-              <th className='text-center'>Url</th>
-              <th className='text-center'></th>
-            </tr>
-          </thead>
-          <tbody>
-            {passInfos.map((article, id) => {
-              return (<tr key={article.id}>
-                <td className="text-center p-2">
-                  {getSequenceNumber(id + 1)}
-                </td>
-                <td className="text-center p-2">{article.description}</td>
-                <td className="text-center p-2">{article.name}</td>
-                <td className="text-center p-2">{article.login}</td>
-                <td className="text-center p-2">{article.password}</td>
-                <td className="text-center p-2">{article.url}</td>
-                <td className="text-center">
-                  <Button className='me-5' style={{'width': '65px'}}
-                    variant="primary" size="sm"
-                    onClick={() => editPass(article.id)}>
-                Edit</Button>{' '}
-                  <Button variant="danger" size="sm" style={{'width': '65px'}}
-                    onClick={() => deletePass(article.id)}>
-                Delete</Button>{' '}</td>
-              </tr>);
-            })}
-          </tbody>
-        </Table>
+      <div className="ag-theme-alpine-dark p-3" style={{height: 600}}>
+        <AgGridReact
+          rowData={passInfos}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          gridOptions={gridOptions}
+        />
         <Pagination setLoading={setLoading}
           allItemsCount={allItemsCount} page={page}/>
-      </div >: null}
+      </div>
     </div>
   );
 }
