@@ -15,8 +15,12 @@ import Signup from './Components/SignUp';
 import Spinner from 'react-bootstrap/Spinner';
 import {useState, useMemo} from 'react';
 import {UserContext} from './Components/UserContext';
-import ProtectedRoute from './Components/ProtectedRoute';
+// eslint-disable-next-line max-len
+import ProtectedUnauthorizedRoute from './Components/ProtectedUnauthorizedRoute';
+import ProtectedAuthorizedRoute from './Components/ProtectedAuthorizedRoute';
 import {USER_TOKEN_KEY} from './shared/consts.js';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -45,7 +49,7 @@ function App() {
             <Routes>
               <Route path="/home"
                 element={ <Home />}/>
-              <Route element={<ProtectedRoute user={currentUser}/>}>
+              <Route element={<ProtectedUnauthorizedRoute user={currentUser}/>}>
                 <Route path="/table/:page"
                   element={<ResponseTable setLoading={setLoading}/>}/>
                 <Route path="/form" element={
@@ -53,14 +57,17 @@ function App() {
                 <Route path="/edituser/:id" element={
                   <EditUser setLoading={setLoading}/>} />
               </Route>
-              <Route path="/login"
-                element={<Login setLoading={setLoading}/>} />
-              <Route path="/signUp"
-                element={<Signup setLoading={setLoading}/>} />
+              <Route element={<ProtectedAuthorizedRoute user={currentUser}/>}>
+                <Route path="/login"
+                  element={<Login setLoading={setLoading}/>} />
+                <Route path="/signUp"
+                  element={<Signup setLoading={setLoading}/>} />
+              </Route>
             </Routes>
           </UserContext.Provider>
         </div>
       </BrowserRouter>
+      <ToastContainer />
     </div>
   );
 }

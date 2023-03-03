@@ -12,11 +12,10 @@ const Login = ({setLoading}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-
   const handleLogin = (e) => {
     setLoading(true);
     e.preventDefault();
-    AuthService.login(email, password).then(
+    AuthService.login(email, password, navigate, setLoading).then(
         () => {
           setCurrentUser(true);
           setLoading(true);

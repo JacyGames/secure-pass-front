@@ -1,12 +1,14 @@
 import axios from 'axios';
 import {USER_TOKEN_KEY} from '../shared/consts';
 const API_URL = 'http://localhost:8080/api/Authenticate';
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const signup = (registerModel) => {
   return axios.post(API_URL + '/register', registerModel);
 };
 
-const login = (email, password) => {
+const login = (email, password, navigate, setLoading) => {
   return axios
       .post(API_URL + '/login', {
         email,
@@ -22,11 +24,19 @@ const login = (email, password) => {
           },
       )
       .catch((error) => {
-        if (error.response && error.response.status === 401) {
+        if (error.response && error.response.status === 401 ||
+          error.response.status === 400) {
+          setLoading(false);
           logout();
+          navigate(`/login`, {replace: true});
+          if (error.response.status === 401) {
+            toast.error('wrong login or password', {
+              autoClose: 3000});
+          } else if (error.response.status === 400) {
+            toast.error('Email is not valid', {
+              autoClose: 3000});
+          }
         }
-        // handle other errors here
-        console.error('An error occurred:', error);
         throw error;
       });
 };
