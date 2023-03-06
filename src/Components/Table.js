@@ -8,12 +8,15 @@ import {AgGridReact} from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import Pagination from './Pagination';
+import {useContext} from 'react';
+import {UserContext} from './UserContext';
 
 function ResponseTable({setLoading}) {
   const [allItemsCount, setAllItemsCount] = useState(0);
   const [passInfos, setPassInfos] = useState([]);
   const {page} = useParams();
   const navigate = useNavigate();
+  const {setCurrentUser} = useContext(UserContext);
   const defaultColDef = useMemo(() => {
     return {
       sortable: true,
@@ -23,11 +26,12 @@ function ResponseTable({setLoading}) {
 
   const getPassInfos = (number) => {
     setLoading(true);
-    fetchPassInfos(number).then((responseData) => {
-      setPassInfos(responseData.data.passwordInfos);
-      setAllItemsCount(responseData.data.pagination.allItemsCount);
-      setLoading(false);
-    });
+    fetchPassInfos(number, navigate, setCurrentUser, setLoading)
+        .then((responseData) => {
+          setPassInfos(responseData.data.passwordInfos);
+          setAllItemsCount(responseData.data.pagination.allItemsCount);
+          setLoading(false);
+        });
   };
 
   const deletePass = (id) => {

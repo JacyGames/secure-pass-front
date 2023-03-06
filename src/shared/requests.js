@@ -1,16 +1,28 @@
 import axios from 'axios';
 import {BASE_URL} from './consts';
 import authHeader from '../services/authHeader';
+import AuthService from '../services/authService';
 
-export function fetchPassInfos(page) {
+export async function fetchPassInfos(page, navigate,
+    setCurrentUser, setLoading) {
+  const date = new Date().getTime();
+  const tokenData = Date.parse(AuthService.getCurrentUser().expiration);
   try {
-    return axios.get(`${BASE_URL}?page=${page}`, {headers: authHeader()});
+    const response = await axios.get(`${BASE_URL}?page=${page}`,
+        {headers: authHeader()});
+    return response;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
+    if (tokenData < date) {
       AuthService.logout();
+      setCurrentUser(false);
+      navigate(`/login`, {replace: true});
+      setLoading(false);
+    } else {
+      throw error;
     }
-  };
+  }
 };
+
 
 export const postPassInfos = (form) => {
   try {

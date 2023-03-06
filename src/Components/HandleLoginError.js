@@ -4,7 +4,7 @@ import AuthService from '../services/authService';
 
 const handleLoginError = (errorStatus, navigate) => {
   AuthService.logout();
-  navigate(`/login`, {replace: true});
+  navigate ? navigate(`/login`, {replace: true}) : null;
 
   switch (errorStatus) {
     case 401:
