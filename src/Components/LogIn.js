@@ -10,16 +10,18 @@ const Login = ({setLoading}) => {
   const [password, setPassword] = useState('');
   const {setCurrentUser} = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
-
   const navigate = useNavigate();
-
+  const signInCredentials = {
+    email,
+    password,
+  };
   const handleLogin = (e) => {
     setLoading(true);
     e.preventDefault();
-    AuthService.login(email, password).then(
+    AuthService.login(signInCredentials, navigate, setLoading).then(
         () => {
           setCurrentUser(true);
-          setLoading(true);
+          setLoading(false);
           navigate(`../table/1`, {replace: true});
         },
     );

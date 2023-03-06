@@ -17,6 +17,8 @@ import {useState, useMemo} from 'react';
 import {UserContext} from './Components/UserContext';
 import ProtectedRoute from './Components/ProtectedRoute';
 import {USER_TOKEN_KEY} from './shared/consts.js';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -45,7 +47,9 @@ function App() {
             <Routes>
               <Route path="/home"
                 element={ <Home />}/>
-              <Route element={<ProtectedRoute user={currentUser}/>}>
+              <Route element={<ProtectedRoute user={currentUser}
+                isAuthorized={false}
+              />}>
                 <Route path="/table/:page"
                   element={<ResponseTable setLoading={setLoading}/>}/>
                 <Route path="/form" element={
@@ -53,14 +57,19 @@ function App() {
                 <Route path="/edituser/:id" element={
                   <EditUser setLoading={setLoading}/>} />
               </Route>
-              <Route path="/login"
-                element={<Login setLoading={setLoading}/>} />
-              <Route path="/signUp"
-                element={<Signup setLoading={setLoading}/>} />
+              <Route element={<ProtectedRoute user={currentUser}
+                isAuthorized={true}
+              />}>
+                <Route path="/login"
+                  element={<Login setLoading={setLoading}/>} />
+                <Route path="/signUp"
+                  element={<Signup setLoading={setLoading}/>} />
+              </Route>
             </Routes>
           </UserContext.Provider>
         </div>
       </BrowserRouter>
+      <ToastContainer />
     </div>
   );
 }

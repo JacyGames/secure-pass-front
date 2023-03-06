@@ -1,32 +1,33 @@
 import axios from 'axios';
 import {USER_TOKEN_KEY} from '../shared/consts';
 const API_URL = 'http://localhost:8080/api/Authenticate';
+import handleLoginError from '../Components/HandleLoginError';
 
 const signup = (registerModel) => {
   return axios.post(API_URL + '/register', registerModel);
 };
 
-const login = (email, password) => {
+const setLoggedUser = (userData) => {
+  localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(userData));
+};
+
+const login = (signInCredentials, navigate, setLoading) => {
   return axios
-      .post(API_URL + '/login', {
-        email,
-        password,
-      })
+      .post(API_URL + '/login', signInCredentials)
       .then(
           (response) => {
             if (response.data.token) {
-              // eslint-disable-next-line max-len
-              localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.data));
+              setLoggedUser(response.data);
             }
             return response.data;
           },
       )
       .catch((error) => {
-        if (error.response && error.response.status === 401) {
-          logout();
+        if (error.response && error.response.status === 401 ||
+          error.response.status === 400) {
+          setLoading(false);
+          handleLoginError(error.response.status, navigate);
         }
-        // handle other errors here
-        console.error('An error occurred:', error);
         throw error;
       });
 };
