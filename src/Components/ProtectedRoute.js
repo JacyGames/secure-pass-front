@@ -1,19 +1,18 @@
 import {Navigate, Outlet} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-// eslint-disable-next-line max-len
-const ProtectedUnauthorizedRoute = ({user, redirectPath ='/home'}) => {
-  if (!user) {
+const ProtectedRoute = ({user, redirectPath ='/home', isAuthorized}) => {
+  if (isAuthorized ? !!user : !user) {
     return <Navigate to={redirectPath} replace />;
   }
 
   return <Outlet />;
 };
 
-
-ProtectedUnauthorizedRoute.propTypes = {
+ProtectedRoute.propTypes = {
   redirectPath: PropTypes.string,
   user: PropTypes.bool,
+  isAuthorized: PropTypes.bool,
 };
 
-export default ProtectedUnauthorizedRoute;
+export default ProtectedRoute;
