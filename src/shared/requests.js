@@ -2,15 +2,17 @@ import axios from 'axios';
 import {BASE_URL} from './consts';
 import authHeader from '../services/authHeader';
 
-export function fetchPassInfos(page) {
+export async function fetchPassInfos(page) {
   try {
-    return axios.get(`${BASE_URL}?page=${page}`, {headers: authHeader()});
-  } catch (error) {
-    if (error.response && error.response.status === 401) {
-      AuthService.logout();
-    }
-  };
+    const response = await axios.get(`${BASE_URL}?page=${page}`,
+        {headers: authHeader()});
+    return response;
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log('Error');
+  }
 };
+
 
 export const postPassInfos = (form) => {
   try {

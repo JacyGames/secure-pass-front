@@ -4,8 +4,9 @@ import {useForm} from 'react-hook-form';
 import {useState} from 'react';
 import {BiError} from 'react-icons/bi';
 import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai';
+import PropTypes from 'prop-types';
 
-const Signup = () => {
+const Signup = ({setLoading}) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
@@ -39,7 +40,7 @@ const Signup = () => {
 
   const onSubmit = () => {
     try {
-      AuthService.signup(RegisterModel).then(
+      AuthService.signup(RegisterModel, setLoading).then(
           navigate(`../login`, {replace: true}),
           reset,
       );
@@ -156,6 +157,10 @@ const Signup = () => {
       </form>
     </div>
   );
+};
+
+Signup.propTypes = {
+  setLoading: PropTypes.func,
 };
 
 export default Signup;

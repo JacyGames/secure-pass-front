@@ -2,11 +2,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {BrowserRouter} from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 // eslint-disable-next-line jest/require-hook
 root.render(
-    <App />,
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>,
 );
 
 // If you want to start measuring performance in your app, pass a function
