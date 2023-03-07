@@ -1,25 +1,15 @@
 import axios from 'axios';
 import {BASE_URL} from './consts';
 import authHeader from '../services/authHeader';
-import AuthService from '../services/authService';
 
-export async function fetchPassInfos(page, navigate,
-    setCurrentUser, setLoading) {
-  const date = new Date().getTime();
-  const tokenData = Date.parse(AuthService.getCurrentUser().expiration);
+export async function fetchPassInfos(page) {
   try {
     const response = await axios.get(`${BASE_URL}?page=${page}`,
         {headers: authHeader()});
     return response;
-  } catch (error) {
-    if (tokenData < date) {
-      AuthService.logout();
-      setCurrentUser(false);
-      navigate(`/login`, {replace: true});
-      setLoading(false);
-    } else {
-      throw error;
-    }
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log('Error');
   }
 };
 

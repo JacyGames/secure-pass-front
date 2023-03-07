@@ -2,9 +2,9 @@ import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthService from '../services/authService';
 
-const handleLoginError = (errorStatus, navigate) => {
+const handleLoginError = (errorStatus, relocate) => {
   AuthService.logout();
-  navigate ? navigate(`/login`, {replace: true}) : null;
+  relocate ? relocate(`/login`, {replace: true}) : null;
 
   switch (errorStatus) {
     case 401:

@@ -11,7 +11,7 @@ import Pagination from './Pagination';
 import {useContext} from 'react';
 import {UserContext} from './UserContext';
 
-function ResponseTable({setLoading}) {
+function ResponseTable({setLoading, setDeleteAction}) {
   const [allItemsCount, setAllItemsCount] = useState(0);
   const [passInfos, setPassInfos] = useState([]);
   const {page} = useParams();
@@ -36,6 +36,7 @@ function ResponseTable({setLoading}) {
 
   const deletePass = (id) => {
     deletePassInfos(id).then(() => getPassInfos(page));
+    setDeleteAction(true);
   };
 
 
@@ -125,6 +126,7 @@ function ResponseTable({setLoading}) {
 
 ResponseTable.propTypes = {
   setLoading: PropTypes.func,
+  setDeleteAction: PropTypes.func,
 };
 
 export default ResponseTable;
