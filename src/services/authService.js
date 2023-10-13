@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {USER_TOKEN_KEY} from '../shared/consts';
-const API_URL = 'http://localhost:8080/api/Authenticate';
+import {USER_TOKEN_KEY, ORIGIN} from '../shared/consts';
+const API_URL = `${ORIGIN}/Authenticate`;
 import handleLoginError from '../Components/HandleLoginError';
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
